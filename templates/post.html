@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head>
+  <title>{{post.title}} | BLOG</title>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>{{post.title}}</h1>
+{{post.content | safe}}
+</body>
+</html>
