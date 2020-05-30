@@ -1,6 +1,6 @@
 import warnings
 
-from sqlalchemy import Column, String, Integer, Date, Text
+from sqlalchemy import Column, String, Integer, Date, DateTime, Text
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SAWarning
 from sqlalchemy.ext.declarative import declarative_base
@@ -17,10 +17,10 @@ class Post(Base):
     slug = Column(String(200), unique=True, nullable=False, name='post_name')
     title = Column(String(200), nullable=False, name='post_title')
     content = Column(Text, nullable=False, name='post_content')
-    date = Column(Date, nullable=False, name='post_date')
-    date_gmt = Column(Date, nullable=False, name='post_date_gmt')
-    modified = Column(Date, nullable=False, name='post_modified')
-    modified_gmt = Column(Date, nullable=False, name='post_modified_gmt')
+    date = Column(DateTime, nullable=False, name='post_date')
+    date_gmt = Column(DateTime, nullable=False, name='post_date_gmt')
+    modified = Column(DateTime, nullable=False, name='post_modified')
+    modified_gmt = Column(DateTime, nullable=False, name='post_modified_gmt')
     post_type = Column(String(20), nullable=False)
     password = Column(String(255), nullable=False, name='post_password')
     status = Column(String(20), nullable=False, name='post_status')
