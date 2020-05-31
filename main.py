@@ -11,8 +11,10 @@ def root():
     return render_template('index.html', posts=posts)
 
 
-@app.route('/<slug>')
+@app.route('/<slug>/')
 def render_post(slug):
+    if slug == 'favicon.ico':
+        return ''
     post = get_post(slug)
     # post['content'] = clean_post(post['content'])
     return render_template('post.html', post=post)
