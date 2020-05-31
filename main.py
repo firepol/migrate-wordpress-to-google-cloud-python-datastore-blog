@@ -5,10 +5,16 @@ from datastore_queries import get_all_posts, get_post, delete_all_posts
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/index/')
 def root():
-    posts = get_all_posts()
+    posts = get_all_posts('post')
     return render_template('index.html', posts=posts)
+
+
+@app.route('/')
+def render_home():
+    post = get_post('home')
+    return render_template('home.html', post=post)
 
 
 @app.route('/<slug>/')
@@ -17,7 +23,7 @@ def render_post(slug):
         return ''
     post = get_post(slug)
     # post['content'] = clean_post(post['content'])
-    return render_template('post.html', post=post)
+    return render_template(f"{post['post_type']}.html", post=post)
 
 
 @app.route('/delete_all_posts_now')

@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+  <title>{{post.title}} | BLOG</title>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>HOME</h1>
+{{post.content | safe}}
+<p>
+  <a href="/index/">blog posts</a>
+</p>
+</body>
+</html>
