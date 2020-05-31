@@ -1,0 +1,35 @@
+body {
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    text-rendering: optimizeLegibility;
+    color: #444;
+}
+
+footer {
+    margin-top: 10px;
+}
+
+pre {
+    margin-top: 10px !important;
+    padding: 10px !important;
+    border: 1px solid #ededed !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 1.6rem;
+}
+
+h2 {
+    font-size: 1.4rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+}
+
+h4, h5, h6 {
+    font-size: 1.1rem;
+}

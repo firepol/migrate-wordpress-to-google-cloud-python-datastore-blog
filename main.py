@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from datastore_queries import get_all_posts, get_post, delete_all_posts
-
+from utils import replace_pre
 
 app = Flask(__name__)
 
@@ -23,6 +23,7 @@ def render_post(slug):
         return ''
     post = get_post(slug)
     # post['content'] = clean_post(post['content'])
+    post['content'] = replace_pre(post['content'])
     return render_template(f"{post['post_type']}.html", post=post)
 
 
