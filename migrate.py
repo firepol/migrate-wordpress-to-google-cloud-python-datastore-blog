@@ -19,7 +19,7 @@ for p in posts:
     item['title'] = p.title
     item['content'] = clean_post(p.content)
     item['post_type'] = p.post_type
-    item['date'] = p.date.isoformat()
+    item['date'] = p.date
     item['modified'] = p.modified.isoformat()
     item['comment_count'] = p.comment_count
     datastore_client.put(item)

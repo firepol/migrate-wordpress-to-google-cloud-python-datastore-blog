@@ -1,8 +1,22 @@
 from flask import Flask, render_template
+from jinja2 import Environment, PackageLoader, select_autoescape
+import configparser
+
 from datastore_queries import get_all_posts, get_post, delete_all_posts
 from utils import replace_pre
 
 app = Flask(__name__)
+
+ini = configparser.ConfigParser()
+ini.read('./data/settings.ini')
+app.jinja_env.globals['INI'] = ini
+
+
+def datetimeformat(value, format='%Y-%m-%d'):
+    return value.strftime(format)
+
+
+app.jinja_env.filters['datetimeformat'] = datetimeformat
 
 
 @app.route('/index/')
