@@ -23,6 +23,22 @@ def get_post(slug):
         return result[0]
 
 
+def get_post_by_id(post_id):
+    client = datastore.Client()
+    kind = 'Post'
+    key = client.key(kind, int(post_id))
+    return client.get(key)
+
+
+def update_post(post_id, content):
+    client = datastore.Client()
+    kind = 'Post'
+    key = client.key(kind, int(post_id))
+    post = client.get(key)
+    post['content'] = content
+    client.put(post)
+
+
 def delete_all_posts():
     client = datastore.Client()
     kind = 'Post'
