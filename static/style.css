@@ -42,3 +42,7 @@ h3 {
 h4, h5, h6 {
     font-size: 1.1rem;
 }
+
+.oddeven-list div.row:nth-child(odd) {
+    background: #e6e6e6;
+}

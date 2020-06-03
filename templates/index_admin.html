@@ -9,13 +9,22 @@
   <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
+<div class="container">
   <h1>Admin</h1>
 
-  <ul>
+  <div class="oddeven-list">
   {% for p in posts %}
-  <li><a href="/{{p.slug}}/" target="_blank">{{ p.title }}</a> - <a href="{{INI['config']['external_url']}}/{{p.slug}}" target="_blank">external</a> - <a href="/admin/edit/{{p.id}}">edit</a> - <a href="/admin/edit/{{p.id}}?nl2br=1">edit nl2br</a></li>
+  <div class="row">
+    <div class="col-8 col-lg-9">
+      <a href="/{{p.slug}}/" target="_blank">{{ p.title }}</a>
+    </div>
+    <div class="col-4 col-lg-3">
+      <a href="{{INI['config']['external_url']}}/{{p.slug}}" target="_blank">external</a> - <a href="/admin/edit/{{p.id}}">edit</a> - <a href="/admin/edit/{{p.id}}?nl2br=1">edit nl2br</a>
+    </div>
+  </div>
   {% endfor %}
-  </ul>
+  </div>
+
+</div>
 </body>
 </html>

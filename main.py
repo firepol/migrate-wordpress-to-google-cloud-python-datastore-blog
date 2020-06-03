@@ -61,7 +61,7 @@ def render_post(slug):
 @app.route('/admin/')
 def admin_home():
     posts = get_all_posts()
-    return render_template('index-admin.html', posts=posts)
+    return render_template('index_admin.html', posts=posts)
 
 
 @app.route('/admin/edit/<post_id>')
