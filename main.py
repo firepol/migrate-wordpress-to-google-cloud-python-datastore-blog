@@ -72,8 +72,8 @@ def admin_edit_post(post_id):
 
 @app.route('/admin/edit/<post_id>', methods=['POST'])
 def admin_save_updated_post(post_id):
-    content = request.form['content']
-    update_post(post_id, content)
+    request_form = request.form
+    update_post(post_id, request_form)
     return redirect(url_for('admin_edit_post', post_id=post_id))
 
 

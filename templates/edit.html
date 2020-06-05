@@ -11,9 +11,11 @@
 </head>
 <body>
 <div class="container">
-<h1>{{post.title}}</h1>
   <form action="/admin/edit/{{post.id}}" method="post">
-    <textarea name="content">
+    <div class="form-group">
+      <textarea name="title" class="md-textarea form-control" id="title">{{post.title}}</textarea>
+    </div>
+    <textarea name="content" id="content">
     {% if request.args.get('nl2br') %}
       {{post.content | safe | nl2br}}
     {% else %}
@@ -33,8 +35,9 @@
 </div>
   <script>
     tinymce.init({
+      mode : 'exact',
+      selector: '#content',
       height: '600',
-      selector: 'textarea',
       plugins: 'lists wordcount powerpaste table advtable advcode link image',
       tools: { title: 'Tools', items: 'code wordcount' },
       toolbar: 'undo redo | styleselect | bold italic | link image | code | removeformat',

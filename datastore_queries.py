@@ -30,12 +30,13 @@ def get_post_by_id(post_id):
     return client.get(key)
 
 
-def update_post(post_id, content):
+def update_post(post_id, request_form):
     client = datastore.Client()
     kind = 'Post'
     key = client.key(kind, int(post_id))
     post = client.get(key)
-    post['content'] = content
+    post['title'] = request_form['title']
+    post['content'] = request_form['content']
     client.put(post)
 
 
