@@ -11,7 +11,9 @@
 <body>
 <div class="container">
 <h1>{{post.title}}</h1>
-{{post.content | safe}}
+  <div class="entry-content">
+    {{post.content | safe}}
+  </div>
   <footer class="entry-meta">
     This entry was posted on {{post.date | datetimeformat}}
   </footer>

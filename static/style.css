@@ -17,7 +17,7 @@ footer {
     margin-top: 10px;
 }
 
-pre {
+.entry-content pre {
     margin-top: 10px !important;
     padding: 10px !important;
     border: 1px solid #ededed !important;
