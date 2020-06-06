@@ -10,17 +10,29 @@
 </head>
 <body>
 <div class="container">
-<article>
-  <header class="entry-header">
-    <h1>{{post.title}}</h1>
+  <header id="masthead">
+    <hgroup>
+      <h1 class="site-title"><a href="/">{{INI['config']['blog_name']}}</a></h1>
+      <h2 class="site-description">{{INI['config']['blog_slogan']}}</h2>
+    </hgroup>
   </header>
-  <div class="entry-content">
-    {{post.content | safe}}
+  <div id="main" class="wrapper row">
+    <div id="primary" class="site-content col-sm-12">
+      <div id="content" role="main">
+        <article id="post-{{post.id}}">
+          <header>
+            <h1 class="entry-title">{{post.title}}</h1>
+          </header>
+          <div class="entry-content">
+            {{post.content | safe}}
+          </div>
+          <footer class="entry-meta">
+            This entry was posted on {{post.date | datetimeformat}}
+          </footer>
+        </article>
+      </div>
+    </div>
   </div>
-  <footer class="entry-meta">
-    This entry was posted on {{post.date | datetimeformat}}
-  </footer>
-</article>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

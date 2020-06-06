@@ -55,7 +55,7 @@ h4, h5, h6 {
     margin-bottom: 20px;
 }
 
-h2.site-description {
+h2.site-description, #content article footer {
     font-size: 0.95rem;
     font-weight: normal;
     color: #757575;
