@@ -9,13 +9,27 @@
   <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
-  <h1>Blog</h1>
-
-  <ul>
-  {% for p in posts %}
-  <li><a href="/{{p.slug}}/">{{ p.title }}</a></li>
-  {% endfor %}
-  </ul>
+<div class="container">
+  <header id="masthead">
+    <hgroup>
+      <h1 class="site-title"><a href="/">{{INI['config']['blog_name']}}</a></h1>
+      <h2 class="site-description">{{INI['config']['blog_slogan']}}</h2>
+    </hgroup>
+  </header>
+  <div id="main" class="wrapper row">
+      <div id="primary" class="site-content col-sm-12">
+        <div id="content" role="main">
+          <h1>All posts</h1>
+          <ul class="oddeven-list">
+          {% for p in posts %}
+          <li class="col-8 col-lg-9">
+            <a href="/{{p.slug}}/">{{ p.title }}</a>, {{p.date | datetimeformat}}
+          </li>
+          {% endfor %}
+          </ul>
+        </div>
+      </div>
+  </div>
+</div>
 </body>
 </html>

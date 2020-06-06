@@ -5,6 +5,14 @@ body {
     background-color: #e6e6e6;
 }
 
+a {
+    color: #21759b;
+}
+
+a:hover {
+    color: #444;
+}
+
 div.container {
     margin-top: 40px;
     margin-bottom: 40px;
@@ -50,6 +58,7 @@ h4, h5, h6 {
 h2.site-description {
     font-size: 0.95rem;
     font-weight: normal;
+    color: #757575;
 }
 
 .oddeven-list div.row:nth-child(odd) {
@@ -59,7 +68,7 @@ h2.site-description {
 .widget-title {
     color: #636363;
     text-transform: uppercase;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     padding-bottom: 5px;
 }
 
@@ -80,7 +89,7 @@ aside ul {
 aside ul li {
     margin: 0 0 0 0;
     padding: 5px 0 5px 0;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     border-top: 1px solid #ededed;
 }
 
