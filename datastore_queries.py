@@ -1,13 +1,13 @@
 from google.cloud import datastore
 
 
-def get_all_posts(post_type=None):
+def get_all_posts(post_type=None, limit=None):
     client = datastore.Client()
     kind = 'Post'
-    query = client.query(kind=kind, order=('date',))
+    query = client.query(kind=kind, order=('-date',))
     if post_type in ['post', 'page']:
         query.add_filter('post_type', '=', post_type)
-    result = query.fetch()
+    result = query.fetch(limit=limit)
     return result
 
 

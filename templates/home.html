@@ -10,12 +10,42 @@
 </head>
 <body>
 <div class="container">
-<h1>{{INI['config']['blog_name']}}</h1>
-  <h2>{{INI['config']['blog_slogan']}}</h2>
-{{post.content | safe}}
-<p>
-  <a href="/index/">blog posts</a>
-</p>
+  <header id="masthead">
+    <hgroup>
+      <h1 class="site-title">{{INI['config']['blog_name']}}</h1>
+      <h2 class="site-description">{{INI['config']['blog_slogan']}}</h2>
+    </hgroup>
+  </header>
+  <div id="main" class="wrapper row">
+    <div id="primary" class="site-content col-sm-9">
+      <div id="content" role="main">
+        <article id="post-{{post.id}}">
+          <header>
+            <h1 class="entry-title">{{post.title}}</h1>
+          </header>
+          <div class="entry-content">
+            {{post.content | safe}}
+          </div>
+        </article>
+      </div>
+    </div>
+    <div id="secondary" class="col-sm-3">
+      <aside id="quick-links">
+        <h3 class="widget-title">Quick links</h3>
+        <ul>
+          <li><a href="/index/">All posts</a></li>
+        </ul>
+      </aside>
+      <aside id="recent-posts">
+        <h3 class="widget-title">Recent Posts</h3>
+        <ul>
+          {% for p in recent_posts %}
+          <li><a href="/{{p.slug}}/">{{ p.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </aside>
+    </div>
+  </div>
 </div>
 </body>
 </html>

@@ -43,7 +43,8 @@ def root():
 @app.route('/')
 def render_home():
     post = get_post('home')
-    return render_template('home.html', post=post)
+    recent_posts = get_all_posts(limit=5)
+    return render_template('home.html', post=post, recent_posts=recent_posts)
 
 
 @app.route('/<slug>/')

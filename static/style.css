@@ -43,6 +43,53 @@ h4, h5, h6 {
     font-size: 1.1rem;
 }
 
+#masthead {
+    margin-bottom: 20px;
+}
+
+h2.site-description {
+    font-size: 0.95rem;
+    font-weight: normal;
+}
+
 .oddeven-list div.row:nth-child(odd) {
     background: #e6e6e6;
+}
+
+.widget-title {
+    color: #636363;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    padding-bottom: 5px;
+}
+
+aside {
+    margin-top: 20px;
+}
+
+aside:first-child {
+    margin-top: 0;
+}
+
+aside ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+aside ul li {
+    margin: 0 0 0 0;
+    padding: 5px 0 5px 0;
+    font-size: 0.9rem;
+    border-top: 1px solid #ededed;
+}
+
+aside ul li:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+aside ul li a {
+    color: #9f9f9f;
+    text-decoration: none;
 }
