@@ -18,18 +18,18 @@
     </hgroup>
   </header>
   <div id="main" class="wrapper row">
-      <div id="primary" class="site-content col-sm-12">
-        <div id="content" role="main">
-          <h1>All posts</h1>
-          <ul class="oddeven-list">
-          {% for p in posts %}
-          <li class="col-8 col-lg-9">
-            <a href="/{{p.slug}}/">{{ p.title }}</a>, {{p.date | datetimeformat}}
-          </li>
-          {% endfor %}
-          </ul>
-        </div>
+    <div id="primary" class="site-content col-sm-12">
+      <div id="content" role="main">
+        <h1>All posts</h1>
+        <ul class="oddeven-list">
+        {% for p in posts %}
+        <li class="col-8 col-lg-9">
+          <a href="/{{p.slug}}/">{{ p.title }}</a>, {{p.date | datetimeformat}}
+        </li>
+        {% endfor %}
+        </ul>
       </div>
+    </div>
   </div>
 </div>
 </body>
