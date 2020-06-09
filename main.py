@@ -1,20 +1,13 @@
-import calendar
 import re
 
 from flask import Flask, render_template, request, redirect, url_for
 from jinja2 import evalcontextfilter, Markup, escape
-import configparser
 
-from datastore_queries import get_all_posts, get_post, delete_all_blog_entities, get_post_by_id, update_post, \
-    insert_archives, \
-    get_archives, get_posts_by_archive
+from datastore_queries import *
 from utils import replace_pre
 
 app = Flask(__name__)
-
-ini = configparser.ConfigParser()
-ini.read('./data/settings.ini')
-app.jinja_env.globals['INI'] = ini
+app.jinja_env.globals['CONFIG'] = get_config_dictionary()
 
 
 def datetimeformat(value, format='%Y-%m-%d'):
@@ -102,7 +95,7 @@ def admin_insert_archives():
 @app.route('/admin/delete_all')
 def admin_delete_all():
     delete_all_blog_entities()
-    return 'All posts and archives deleted'
+    return 'All configs, posts and archives deleted'
 
 
 if __name__ == '__main__':

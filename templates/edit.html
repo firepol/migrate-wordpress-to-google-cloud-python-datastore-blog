@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Admin | Edit | {{post.title}}</title>
-  <script src="https://cdn.tiny.cloud/1/{{INI['config']['tinymce_api_key']}}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script src="https://cdn.tiny.cloud/1/{{CONFIG['tinymce_api_key']}}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -24,7 +24,7 @@
     </textarea>
     <button class="btn btn-primary" type="submit">Save</button> -
     <a href="/{{post.slug}}" target="_blank">view post</a> -
-    <a href="{{INI['config']['external_url']}}/{{post.slug}}" target="_blank">external</a> -
+    <a href="{{CONFIG['external_url']}}/{{post.slug}}" target="_blank">external</a> -
     <a href="/admin/edit/{{post.id}}">edit</a> -
     <a href="/admin/edit/{{post.id}}?nl2br=1">edit nl2br</a> -
     <a href="/admin/">index</a>

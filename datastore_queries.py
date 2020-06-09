@@ -4,6 +4,20 @@ import locale
 from google.cloud import datastore
 
 
+def get_configs():
+    client = datastore.Client()
+    query = client.query(kind='Config')
+    return query.fetch()
+
+
+def get_config_dictionary():
+    configs = get_configs()
+    result = {}
+    for c in configs:
+        result[c.key.id_or_name] = c['value']
+    return result
+
+
 def get_all_posts(post_type=None, limit=None):
     """
     :param post_type: 'post' or 'page'
@@ -79,6 +93,7 @@ def insert_archive_by_post(client, post):
 
 def delete_all_blog_entities():
     client = datastore.Client()
+    delete_all_entities_by_kind(client, 'Config')
     delete_all_entities_by_kind(client, 'Post')
     delete_all_entities_by_kind(client, 'Archive')
 

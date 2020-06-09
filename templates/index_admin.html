@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Admin | {{INI['config']['blog_name']}}</title>
+  <title>Admin | {{CONFIG['blog_name']}}</title>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -19,7 +19,7 @@
       <a href="/{{p.slug}}/" target="_blank">{{ p.title }}</a>
     </div>
     <div class="col-4 col-lg-3">
-      <a href="{{INI['config']['external_url']}}/{{p.slug}}" target="_blank">external</a> - <a href="/admin/edit/{{p.id}}">edit</a> - <a href="/admin/edit/{{p.id}}?nl2br=1">edit nl2br</a>
+      <a href="{{CONFIG['external_url']}}/{{p.slug}}" target="_blank">external</a> - <a href="/admin/edit/{{p.id}}">edit</a> - <a href="/admin/edit/{{p.id}}?nl2br=1">edit nl2br</a>
     </div>
   </div>
   {% endfor %}

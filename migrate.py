@@ -1,5 +1,6 @@
 import locale
 import re
+import configparser
 
 from datastore_queries import insert_archive_by_post
 from db_model import get_db_session
@@ -26,8 +27,20 @@ def nl2br(value):
     return result
 
 
+settings = configparser.ConfigParser()
+settings.read('./data/settings.ini')
+
+print('Saving configs...')
+for config_name, config_value in settings.items('config'):
+    print(f'{config_name}: {config_value}')
+    key = client.key('Config', config_name)
+    item = datastore.Entity(key=key)
+    item['value'] = config_value
+    client.put(item)
+
+print('Saving posts...')
 for p in posts:
-    print(f'Saving {p.id}: {p.title}')
+    print(f'{p.id}: {p.title}')
     key = client.key('Post', p.id)
     item = datastore.Entity(key=key, exclude_from_indexes=('content',))
     item['slug'] = p.slug
