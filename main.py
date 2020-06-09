@@ -68,17 +68,41 @@ def render_archive(year, month):
 
 @app.route('/admin/')
 def admin_home():
+    return render_template('admin.html')
+
+
+@app.route('/admin/configs/')
+def admin_configs():
+    configs = get_configs()
+    return render_template('admin_configs.html', configs=configs)
+
+
+@app.route('/admin/config/<config_id>')
+def admin_edit_config(config_id):
+    config = get_config_by_id(config_id)
+    return render_template('admin_config.html', config=config)
+
+
+@app.route('/admin/config/<config_id>', methods=['POST'])
+def admin_save_updated_config(config_id):
+    request_form = request.form
+    update_config(config_id, request_form)
+    return redirect(url_for('admin_edit_config', config_id=config_id))
+
+
+@app.route('/admin/posts/')
+def admin_posts():
     posts = get_all_posts()
-    return render_template('index_admin.html', posts=posts)
+    return render_template('admin_posts.html', posts=posts)
 
 
-@app.route('/admin/edit/<post_id>')
+@app.route('/admin/post/<post_id>')
 def admin_edit_post(post_id):
     post = get_post_by_id(post_id)
-    return render_template('edit.html', post=post)
+    return render_template('admin_post.html', post=post)
 
 
-@app.route('/admin/edit/<post_id>', methods=['POST'])
+@app.route('/admin/post/<post_id>', methods=['POST'])
 def admin_save_updated_post(post_id):
     request_form = request.form
     update_post(post_id, request_form)

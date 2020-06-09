@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="container">
-  <form action="/admin/edit/{{post.id}}" method="post">
+  <form action="/admin/post/{{post.id}}" method="post">
     <div class="form-group">
       <textarea name="title" class="md-textarea form-control" id="title">{{post.title}}</textarea>
     </div>
@@ -25,9 +25,9 @@
     <button class="btn btn-primary" type="submit">Save</button> -
     <a href="/{{post.slug}}" target="_blank">view post</a> -
     <a href="{{CONFIG['external_url']}}/{{post.slug}}" target="_blank">external</a> -
-    <a href="/admin/edit/{{post.id}}">edit</a> -
-    <a href="/admin/edit/{{post.id}}?nl2br=1">edit nl2br</a> -
-    <a href="/admin/">index</a>
+    <a href="/admin/post/{{post.id}}">edit</a> -
+    <a href="/admin/post/{{post.id}}?nl2br=1">edit nl2br</a> -
+    <a href="/admin/posts/">admin posts</a>
   </form>
   <footer class="entry-meta">
     This entry was posted on {{post.date | datetimeformat}}

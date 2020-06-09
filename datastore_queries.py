@@ -18,6 +18,20 @@ def get_config_dictionary():
     return result
 
 
+def get_config_by_id(config_id):
+    client = datastore.Client()
+    key = client.key('Config', config_id)
+    return client.get(key)
+
+
+def update_config(config_id, request_form):
+    client = datastore.Client()
+    key = client.key('Config', config_id)
+    config = client.get(key)
+    config['value'] = request_form['value']
+    client.put(config)
+
+
 def get_all_posts(post_type=None, limit=None):
     """
     :param post_type: 'post' or 'page'

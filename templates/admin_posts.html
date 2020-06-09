@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Admin | {{CONFIG['blog_name']}}</title>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+  <h1><a href="/admin/">Admin</a></h1>
+
+  <div class="oddeven-list">
+  {% for p in posts %}
+  <div class="row">
+    <div class="col-8 col-lg-9">
+      <a href="/{{p.slug}}/" target="_blank">{{ p.title }}</a>
+    </div>
+    <div class="col-4 col-lg-3">
+      <a href="{{CONFIG['external_url']}}/{{p.slug}}" target="_blank">external</a> - <a href="/admin/post/{{p.id}}">edit</a> - <a href="/admin/post/{{p.id}}?nl2br=1">edit nl2br</a>
+    </div>
+  </div>
+  {% endfor %}
+  </div>
+</div>
+</body>
+</html>
