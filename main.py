@@ -1,10 +1,13 @@
+import calendar
 import re
 
 from flask import Flask, render_template, request, redirect, url_for
 from jinja2 import evalcontextfilter, Markup, escape
 import configparser
 
-from datastore_queries import get_all_posts, get_post, delete_all_posts, get_post_by_id, update_post
+from datastore_queries import get_all_posts, get_post, delete_all_blog_entities, get_post_by_id, update_post, \
+    insert_archives, \
+    get_archives, get_posts_by_archive
 from utils import replace_pre
 
 app = Flask(__name__)
@@ -44,7 +47,8 @@ def root():
 def render_home():
     post = get_post('home')
     recent_posts = get_all_posts(limit=5)
-    return render_template('home.html', post=post, recent_posts=recent_posts)
+    archives = get_archives()
+    return render_template('home.html', post=post, recent_posts=recent_posts, archives=archives)
 
 
 @app.route('/<slug>/')
@@ -55,6 +59,16 @@ def render_post(slug):
     # post['content'] = clean_post(post['content'])
     post['content'] = replace_pre(post['content'])
     return render_template(f"{post['post_type']}.html", post=post)
+
+
+@app.route('/<int:year>/<int:month>/')
+def render_archive(year, month):
+    posts = get_posts_by_archive(year, month)
+    recent_posts = get_all_posts(limit=5)
+    archives = get_archives()
+    month_name = calendar.month_name[month]
+    return render_template('archives.html', posts=posts, year=year, month_name=month_name,
+                           recent_posts=recent_posts, archives=archives)
 
 
 # ADMIN #
@@ -78,10 +92,17 @@ def admin_save_updated_post(post_id):
     return redirect(url_for('admin_edit_post', post_id=post_id))
 
 
-@app.route('/admin/delete_all_posts_now')
-def admin_delete_all_posts_now():
-    delete_all_posts()
-    return 'All posts deleted'
+@app.route('/admin/insert_archives')
+def admin_insert_archives():
+    posts = get_all_posts('post')
+    insert_archives(posts)
+    return 'Archives index created'
+
+
+@app.route('/admin/delete_all')
+def admin_delete_all():
+    delete_all_blog_entities()
+    return 'All posts and archives deleted'
 
 
 if __name__ == '__main__':

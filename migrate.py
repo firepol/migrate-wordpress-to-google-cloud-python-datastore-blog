@@ -1,17 +1,21 @@
+import locale
 import re
 
+from datastore_queries import insert_archive_by_post
 from db_model import get_db_session
 from db_queries import get_published_posts
 from google.cloud import datastore
-from jinja2 import evalcontextfilter, Markup, escape
-from utils import clean_post, replace_pre
+from utils import clean_post
 
-datastore_client = datastore.Client()
+client = datastore.Client()
 
 session = get_db_session()
 posts = get_published_posts(session)
 
-kind = 'Post'
+try:
+    locale.setlocale(locale.LC_ALL, 'en_US')
+except:
+    print('en_US locale could not be found')
 
 
 def nl2br(value):
@@ -24,12 +28,14 @@ def nl2br(value):
 
 for p in posts:
     print(f'Saving {p.id}: {p.title}')
-    key = datastore_client.key(kind, p.id)
+    key = client.key('Post', p.id)
     item = datastore.Entity(key=key, exclude_from_indexes=('content',))
     item['slug'] = p.slug
     item['title'] = p.title
     item['post_type'] = p.post_type
     item['date'] = p.date
+    item['year'] = p.date.year
+    item['month'] = p.date.month
     item['modified'] = p.modified.isoformat()
     item['comment_count'] = p.comment_count
 
@@ -38,5 +44,8 @@ for p in posts:
 
     item['content'] = nl2br_content
 
-    datastore_client.put(item)
+    client.put(item)
+
+    insert_archive_by_post(client, item)
+
     # print(f'Saved {item.key.name}')
