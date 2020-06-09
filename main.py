@@ -98,14 +98,19 @@ def admin_posts():
 
 @app.route('/admin/post/<post_id>')
 def admin_edit_post(post_id):
-    post = get_post_by_id(post_id)
+    if post_id == 'new':
+        post = {
+            'id': 'new'
+        }
+    else:
+        post = get_post_by_id(post_id)
     return render_template('admin_post.html', post=post)
 
 
 @app.route('/admin/post/<post_id>', methods=['POST'])
 def admin_save_updated_post(post_id):
     request_form = request.form
-    update_post(post_id, request_form)
+    post_id = update_post(post_id, request_form)
     return redirect(url_for('admin_edit_post', post_id=post_id))
 
 

@@ -8,22 +8,45 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-<div class="container">
+<body class="bg-white">
+<div class="container-fluid">
   <h1><a href="/admin/">Admin</a></h1>
 
-  <div class="oddeven-list">
+  <div class="form-group">
+    <a href="/admin/post/new" class="btn btn-primary">New Post</a>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Actions</th>
+        <th scope="col">Title</th>
+        <th scope="col">Comments</th>
+      </tr>
+    </thead>
+    <tbody>
   {% for p in posts %}
-  <div class="row">
-    <div class="col-8 col-lg-9">
+  <tr>
+    <th scope="row">{{p.id}}</th>
+    <td class="text-nowrap">
+      <a href="/admin/post/{{p.id}}" class="btn btn-sm btn-primary">edit</a>
+      <a href="/admin/post/{{p.id}}?nl2br=1" class="btn btn-sm btn-secondary" title="Edit adding breaks">e2</a>
+    </td>
+    <td>
       <a href="/{{p.slug}}/" target="_blank">{{ p.title }}</a>
-    </div>
-    <div class="col-4 col-lg-3">
-      <a href="{{CONFIG['external_url']}}/{{p.slug}}" target="_blank">external</a> - <a href="/admin/post/{{p.id}}">edit</a> - <a href="/admin/post/{{p.id}}?nl2br=1">edit nl2br</a>
-    </div>
-  </div>
+      {% if p.post_type == 'page' %}
+      <span class="badge badge-secondary">page</span>
+      {% endif %}
+    </td>
+    <td>
+      <a href="{{CONFIG['external_url']}}/{{p.slug}}" target="_blank" title="Open original post on {{CONFIG['external_url']}}/{{p.slug}}">view</a> {{p.comment_count}}
+    </td>
+  </tr>
+
   {% endfor %}
-  </div>
+    </tbody>
+  </table>
 </div>
 </body>
 </html>

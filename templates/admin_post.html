@@ -11,10 +11,22 @@
 </head>
 <body>
 <div class="container">
+  <h1><a href="/admin/posts/">Admin Posts</a></h1>
   <form action="/admin/post/{{post.id}}" method="post">
     <div class="form-group">
-      <textarea name="title" class="md-textarea form-control" id="title">{{post.title}}</textarea>
+      <textarea name="title" class="md-textarea form-control" id="title" placeholder="Title">{{post.title}}</textarea>
     </div>
+    <div class="form-group">
+      <input name="slug" class="form-control" id="slug" placeholder="Slug" value="{{post.slug}}" />
+    </div>
+    <div class="form-group">
+<!--      <input placeholder="Post type (post or page)" value="{{post.post_type}}" />-->
+      <select name="post_type" class="form-control" id="post_type">
+        <option {% if post.post_type == 'post' %}selected{% endif %}>post</option>
+        <option {% if post.post_type == 'page' %}selected{% endif %}>page</option>
+      </select>
+    </div>
+    <div class="form-group">
     <textarea name="content" id="content">
     {% if request.args.get('nl2br') %}
       {{post.content | safe | nl2br}}
@@ -22,15 +34,17 @@
       {{post.content | safe}}
     {% endif %}
     </textarea>
-    <button class="btn btn-primary" type="submit">Save</button> -
+    </div>
+    <button class="btn btn-primary" type="submit">Save</button>
+  </form>
+  <footer class="entry-meta">
+    This entry was posted on {{post.date}}. Last modified on {{post.modified}}.
+  </footer>
+  <footer>
     <a href="/{{post.slug}}" target="_blank">view post</a> -
     <a href="{{CONFIG['external_url']}}/{{post.slug}}" target="_blank">external</a> -
     <a href="/admin/post/{{post.id}}">edit</a> -
-    <a href="/admin/post/{{post.id}}?nl2br=1">edit nl2br</a> -
-    <a href="/admin/posts/">admin posts</a>
-  </form>
-  <footer class="entry-meta">
-    This entry was posted on {{post.date | datetimeformat}}
+    <a href="/admin/post/{{post.id}}?nl2br=1">edit nl2br</a>
   </footer>
 </div>
   <script>

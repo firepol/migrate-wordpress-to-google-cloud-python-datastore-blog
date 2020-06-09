@@ -1,4 +1,5 @@
 import calendar
+import datetime
 import locale
 
 from google.cloud import datastore
@@ -71,11 +72,25 @@ def get_post_by_id(post_id):
 
 def update_post(post_id, request_form):
     client = datastore.Client()
-    key = client.key('Post', int(post_id))
-    post = client.get(key)
+    post_date = datetime.datetime.now()
+    if post_id != 'new':
+        key = client.key('Post', int(post_id))
+        post = client.get(key)
+    else:
+        key = client.key('Post')
+        post = datastore.Entity(key=key)
+        post['date'] = post_date
+        # comment_count needed only for imported posts
     post['title'] = request_form['title']
+    post['slug'] = request_form['slug']
     post['content'] = request_form['content']
+    post['post_type'] = request_form['post_type']
+    post['modified'] = post_date
+    post['year'] = post['date'].year
+    post['month'] = post['date'].month
     client.put(post)
+    insert_archive_by_post(client, post)
+    return post.key.id
 
 
 def get_archives():
