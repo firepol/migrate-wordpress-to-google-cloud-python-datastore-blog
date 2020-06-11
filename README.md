@@ -23,7 +23,7 @@ In **phpMyAdmin** > export:
 
 ## Configure your blog settings
 
-My solution expects a folder called `data` and a `settings.ini` file in it. Simply rename the `samples` folder to `data` and edit the `settings.ini` file in it.
+My solution expects a folder called `data` and a `settings.ini` file in it. Simply rename the `samples` folder to `data` and edit the `settings.ini` file in it. If you do not use google analytics, leave the `google_analytics_code` empty, else add your code. For TinyMCE, you must get your own key at https://www.tiny.cloud/
 
 ## Import the CSV in a local SQLite database
 
