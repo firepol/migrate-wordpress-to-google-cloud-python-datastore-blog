@@ -1,6 +1,7 @@
 import locale
 import re
 import configparser
+import sys
 
 from datastore_queries import insert_archive_by_post
 from db_model import get_db_session
@@ -31,12 +32,17 @@ settings = configparser.ConfigParser()
 settings.read('./data/settings.ini')
 
 print('Saving configs...')
-for config_name, config_value in settings.items('config'):
+for config_name, config_value in settings.items('blog_config'):
     print(f'{config_name}: {config_value}')
     key = client.key('Config', config_name)
     item = datastore.Entity(key=key)
     item['value'] = config_value
     client.put(item)
+
+if len(list(posts)) == 0:
+    print(f"Empty database created at {settings['config']['db_url']}; "
+          f"please create the `wp_posts` table and then import your posts exported (in CSV format)")
+    sys.exit()
 
 print('Saving posts...')
 for p in posts:

@@ -1,5 +1,6 @@
 import warnings
 
+import configparser
 from sqlalchemy import Column, String, Integer, Date, DateTime, Text
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SAWarning
@@ -27,8 +28,11 @@ class Post(Base):
     comment_count = Column(Integer, nullable=False)
 
 
+settings = configparser.ConfigParser()
+settings.read('./data/settings.ini')
+
 # Engine is called each time db_model is imported
-engine = create_engine('sqlite:///data/pbworks.sqlite')
+engine = create_engine(settings['config']['db_url'])
 Base.metadata.create_all(engine)
 
 
