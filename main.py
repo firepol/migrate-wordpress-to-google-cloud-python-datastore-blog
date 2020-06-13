@@ -1,6 +1,6 @@
 import re
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, abort
 from jinja2 import evalcontextfilter, Markup, escape
 
 from datastore_queries import *
@@ -112,6 +112,15 @@ def admin_save_updated_post(post_id):
     request_form = request.form
     post_id = update_post(post_id, request_form)
     return redirect(url_for('admin_edit_post', post_id=post_id))
+
+
+@app.route('/admin/delete/<post_id>', methods=['DELETE'])
+def admin_delete_post(post_id):
+    try:
+        delete_post(post_id)
+        return '', 204
+    except:
+        abort(500)
 
 
 @app.route('/admin/insert_archives')

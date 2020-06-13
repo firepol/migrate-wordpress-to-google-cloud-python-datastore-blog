@@ -127,7 +127,13 @@ def delete_all_blog_entities():
     delete_all_entities_by_kind(client, 'Archive')
 
 
+def delete_post(post_id):
+    client = datastore.Client()
+    key = client.key('Post', int(post_id))
+    client.delete(key)
+
+
 def delete_all_entities_by_kind(client, kind):
-    posts = client.query(kind=kind).fetch()
-    for p in posts:
-        client.delete(p.key)
+    entities = client.query(kind=kind).fetch()
+    for entity in entities:
+        client.delete(entity.key)
