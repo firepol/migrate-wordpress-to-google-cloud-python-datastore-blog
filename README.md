@@ -20,6 +20,8 @@ In **phpMyAdmin** > export:
 - **Export method**: select `Custom - display all possible options`
 - **Format**: select `CSV`
 - **Tables**: check just the `wp_posts` table
+- **Format-specific options**: check `Put columns names in the first row`
+- Save the file in the `data/` folder, then edit its name in the `settings.ini` file `[config] > wp_posts_csv_path` option (by default it's `data/wp_posts.csv`)
 
 ## Configure your blog settings
 
