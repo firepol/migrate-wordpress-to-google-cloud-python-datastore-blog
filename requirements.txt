@@ -2,3 +2,5 @@ google-cloud-datastore
 sqlalchemy
 flask
 ConfigParser
+Jinja2
+click

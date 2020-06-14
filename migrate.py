@@ -40,8 +40,8 @@ for config_name, config_value in settings.items('blog_config'):
     client.put(item)
 
 if len(list(posts)) == 0:
-    print(f"Empty database created at {settings['config']['db_url']}; "
-          f"please create the `wp_posts` table and then import your posts exported (in CSV format)")
+    print('The `wp_posts` table is empty: if not done already, please run `db_init.py`, '
+          'then import your posts (that you exported in CSV format)')
     sys.exit()
 
 print('Saving posts...')

@@ -15,6 +15,7 @@
 
 .idea/
 data/
+db/
 keys/
 db_model.py
 db_queries.py
