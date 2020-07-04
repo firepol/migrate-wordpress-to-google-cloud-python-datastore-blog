@@ -22,7 +22,7 @@ def get_upload_variables():
     settings.read('./data/settings.ini')
     bucket_name = settings['blog_config']['google_cloud_bucket_name']
     source_root = settings['config']['wp_uploads_path']
-    blob_name_prefix = settings['config']['blob_name_prefix']
+    blob_name_prefix = settings['blog_config']['blob_name_prefix']
     max_files_to_upload = int(settings['config']['max_files_to_upload'])
     log.info(f'Copying {max_files_to_upload} files from: {source_root} to blob name prefixed with `{blob_name_prefix}`')
     storage_client = storage.Client()
@@ -32,8 +32,8 @@ def get_upload_variables():
 
 def upload_file_to_bucket(source_root, subdir, file, bucket, blob_name_prefix, log_upload_file_message_prefix=''):
     # TODO: test with Windows paths (C:, D: etc.)
-    partial_blob_name = f'{subdir}/{file}'.replace(source_root, '')
-    blob_name = f'{blob_name_prefix}{partial_blob_name}'
+    partial_blob_name = f'{subdir}/{file}'.replace(source_root, '')  # 2020/01/foo-bar.jpg
+    blob_name = f'{blob_name_prefix}{partial_blob_name}'  # media/2020/01/foo-bar.jpg
     log.info(f'{log_upload_file_message_prefix}Uploading file {partial_blob_name}')
     file_path = os.path.join(subdir, file)
     blob = bucket.blob(blob_name)

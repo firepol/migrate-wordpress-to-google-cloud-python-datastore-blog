@@ -9,15 +9,14 @@ from db_queries import get_published_posts
 from google.cloud import datastore
 from utils import clean_post
 
-client = datastore.Client()
+settings = configparser.ConfigParser()
+settings.read('./data/settings.ini')
 
-session = get_db_session()
-posts = get_published_posts(session)
-
-try:
-    locale.setlocale(locale.LC_ALL, 'en_US')
-except:
-    print('en_US locale could not be found')
+wp_uploads_dir = 'wp-content/uploads'  # WordPress has all the uploads in this relative directory
+external_url = settings['blog_config']['external_url']  # This is the website URL (assuming new website is the same)
+blob_name_prefix = settings['blog_config']['blob_name_prefix']  # Instead of wp_uploads_dir, use this directory
+bucket_name = settings['blog_config']['google_cloud_bucket_name']
+bucket_host = 'https://storage.googleapis.com'
 
 
 def nl2br(value):
@@ -28,43 +27,70 @@ def nl2br(value):
     return result
 
 
-settings = configparser.ConfigParser()
-settings.read('./data/settings.ini')
+def replace_media_urls(content, old_url, new_url):
+    """
+    Fix URLs in content, replace them with a new URL with different prefix
 
-print('Saving configs...')
-for config_name, config_value in settings.items('blog_config'):
-    print(f'{config_name}: {config_value}')
-    key = client.key('Config', config_name)
-    item = datastore.Entity(key=key)
-    item['value'] = config_value
-    client.put(item)
+    >>> replace_media_urls('Check http://foo.bar/wp-content/uploads/foo.jpg or http://foo.bar',\
+    'http://foo.bar/wp-content/uploads/', 'https://storage.googleapis.com/media/')
+    'Check https://storage.googleapis.com/media/foo.jpg or http://foo.bar'
+    """
 
-if len(list(posts)) == 0:
-    print('The `wp_posts` table is empty: if not done already, please run `db_init.py`, '
-          'then import your posts (that you exported in CSV format)')
-    sys.exit()
+    return content.replace(old_url, new_url)
 
-print('Saving posts...')
-for p in posts:
-    print(f'{p.id}: {p.title}')
-    key = client.key('Post', p.id)
-    item = datastore.Entity(key=key, exclude_from_indexes=('content',))
-    item['slug'] = p.slug
-    item['title'] = p.title
-    item['post_type'] = p.post_type
-    item['date'] = p.date
-    item['year'] = p.date.year
-    item['month'] = p.date.month
-    item['modified'] = p.modified.isoformat()
-    item['comment_count'] = p.comment_count
 
-    content = clean_post(p.content)
-    nl2br_content = nl2br(content)
+def save_configs_to_datastore():
+    client = datastore.Client()
+    print('Saving configs...')
+    for config_name, config_value in settings.items('blog_config'):
+        print(f'{config_name}: {config_value}')
+        key = client.key('Config', config_name)
+        item = datastore.Entity(key=key)
+        item['value'] = config_value
+        client.put(item)
 
-    item['content'] = nl2br_content
 
-    client.put(item)
+def save_posts_to_datastore():
+    # Locale is preferred, to have the date in US format
+    try:
+        locale.setlocale(locale.LC_ALL, 'en_US')
+    except:
+        print('en_US locale could not be found')
 
-    insert_archive_by_post(client, item)
+    session = get_db_session()
+    posts = get_published_posts(session)
+    client = datastore.Client()
 
-    # print(f'Saved {item.key.name}')
+    if len(list(posts)) == 0:
+        print('The `wp_posts` table is empty: if not done already, please run `db_init.py`, '
+              'then import your posts (that you exported in CSV format)')
+        sys.exit()
+    print('Saving posts...')
+    for p in posts:
+        print(f'{p.id}: {p.title}')
+        key = client.key('Post', p.id)
+        item = datastore.Entity(key=key, exclude_from_indexes=('content',))
+        item['slug'] = p.slug
+        item['title'] = p.title
+        item['post_type'] = p.post_type
+        item['date'] = p.date
+        item['year'] = p.date.year
+        item['month'] = p.date.month
+        item['modified'] = p.modified.isoformat()
+        item['comment_count'] = p.comment_count
+
+        content = clean_post(p.content)
+        nl2br_content = nl2br(content)
+
+        item['content'] = nl2br_content
+        item['content'] = replace_media_urls(item['content'], f'{external_url}/{wp_uploads_dir}',
+                                             f'{bucket_host}/{bucket_name}/{blob_name_prefix}')
+
+        client.put(item)
+
+        insert_archive_by_post(client, item)
+
+
+if __name__ == '__main__':
+    save_configs_to_datastore()
+    save_posts_to_datastore()
