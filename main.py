@@ -7,7 +7,16 @@ from datastore_queries import *
 from utils import prettyprint_pre
 
 app = Flask(__name__)
-app.jinja_env.globals['CONFIG'] = get_config_dictionary()
+
+
+def refresh_config():
+    """
+    Set or refresh the CONFIG dictionary (used in templates) based on datastore Config entities
+    """
+    app.jinja_env.globals['CONFIG'] = get_config_dictionary()
+
+
+refresh_config()
 
 
 def datetimeformat(value, format='%Y-%m-%d'):
@@ -71,6 +80,8 @@ def admin_home():
     return render_template('admin.html')
 
 
+# ADMIN CONFIGS
+
 @app.route('/admin/configs/')
 def admin_configs():
     configs = get_configs()
@@ -79,16 +90,36 @@ def admin_configs():
 
 @app.route('/admin/config/<config_id>')
 def admin_edit_config(config_id):
-    config = get_config_by_id(config_id)
+    if config_id == 'new':
+        config = {
+            'name': 'new'
+        }
+    else:
+        config = get_config_by_id(config_id)
+        config['name'] = config.key.id_or_name
+    refresh_config()
     return render_template('admin_config.html', config=config)
 
 
 @app.route('/admin/config/<config_id>', methods=['POST'])
 def admin_save_updated_config(config_id):
     request_form = request.form
-    update_config(config_id, request_form)
-    return redirect(url_for('admin_edit_config', config_id=config_id))
+    config = update_config(config_id, request_form)
+    refresh_config()
+    return redirect(url_for('admin_edit_config', config_id=config.key.id_or_name))
 
+
+@app.route('/admin/config/delete/<config_id>', methods=['DELETE'])
+def admin_delete_config(config_id):
+    try:
+        delete_config(config_id)
+        refresh_config()
+        return '', 204
+    except:
+        abort(500)
+
+
+# ADMIN POSTS
 
 @app.route('/admin/posts/')
 def admin_posts():
@@ -110,11 +141,11 @@ def admin_edit_post(post_id):
 @app.route('/admin/post/<post_id>', methods=['POST'])
 def admin_save_updated_post(post_id):
     request_form = request.form
-    post_id = update_post(post_id, request_form)
-    return redirect(url_for('admin_edit_post', post_id=post_id))
+    post = update_post(post_id, request_form)
+    return redirect(url_for('admin_edit_post', post_id=post.key.id))
 
 
-@app.route('/admin/delete/<post_id>', methods=['DELETE'])
+@app.route('/admin/post/delete/<post_id>', methods=['DELETE'])
 def admin_delete_post(post_id):
     try:
         delete_post(post_id)

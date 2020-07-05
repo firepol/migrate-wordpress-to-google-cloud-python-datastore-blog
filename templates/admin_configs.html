@@ -12,21 +12,34 @@
 <div class="container">
   <h1><a href="/admin/">Admin</a></h1>
 
-  <div class="oddeven-list">
-  {% for c in configs %}
-  <div class="row">
-    <div class="col-3">
-      {{c.key.id_or_name}}
-    </div>
-    <div class="col-7">
-      {{c.value}}
-    </div>
-    <div class="col-2">
-      <a href="/admin/config/{{c.key.id_or_name}}">edit</a>
-    </div>
+  <div class="form-group">
+    <a href="/admin/config/new" class="btn btn-primary">New Config</a>
   </div>
-  {% endfor %}
-  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Actions</th>
+        <th scope="col">Title</th>
+        <th scope="col">Comments</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for c in configs %}
+    <tr>
+      <td class="text-nowrap">
+        <a href="/admin/config/{{c.key.id_or_name}}" class="btn btn-sm btn-primary">edit</a>
+      </td>
+      <td>
+        {{c.key.id_or_name}}
+      </td>
+      <td>
+        {{c.value}}
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 </div>
 </body>
 </html>

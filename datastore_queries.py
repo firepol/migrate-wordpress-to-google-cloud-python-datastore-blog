@@ -27,10 +27,15 @@ def get_config_by_id(config_id):
 
 def update_config(config_id, request_form):
     client = datastore.Client()
-    key = client.key('Config', config_id)
-    config = client.get(key)
+    if config_id != 'new':
+        key = client.key('Config', config_id)
+        config = client.get(key)
+    else:
+        key = client.key('Config', request_form['name'])
+        config = datastore.Entity(key=key)
     config['value'] = request_form['value']
     client.put(config)
+    return config
 
 
 def get_all_posts(post_type=None, limit=None):
@@ -90,7 +95,7 @@ def update_post(post_id, request_form):
     post['month'] = post['date'].month
     client.put(post)
     insert_archive_by_post(client, post)
-    return post.key.id
+    return post
 
 
 def get_archives():
@@ -120,17 +125,23 @@ def insert_archive_by_post(client, post):
     client.put(item)
 
 
+def delete_post(post_id):
+    client = datastore.Client()
+    key = client.key('Post', int(post_id))
+    client.delete(key)
+
+
+def delete_config(config_id):
+    client = datastore.Client()
+    key = client.key('Config', config_id)
+    client.delete(key)
+
+
 def delete_all_blog_entities():
     client = datastore.Client()
     delete_all_entities_by_kind(client, 'Config')
     delete_all_entities_by_kind(client, 'Post')
     delete_all_entities_by_kind(client, 'Archive')
-
-
-def delete_post(post_id):
-    client = datastore.Client()
-    key = client.key('Post', int(post_id))
-    client.delete(key)
 
 
 def delete_all_entities_by_kind(client, kind):

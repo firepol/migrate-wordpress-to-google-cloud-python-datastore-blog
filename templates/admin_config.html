@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Admin | Edit | {{config.key.id_or_name}}</title>
+  <title>Admin | Edit | {{config.name}}</title>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -11,13 +11,30 @@
 <body>
 <div class="container">
     <h1><a href="/admin/configs/">Admin Configs</a></h1>
-    <form action="/admin/config/{{config.key.id_or_name}}" method="post">
-        <h2>Edit: {{config.key.id_or_name}}</h2>
+    <form action="/admin/config/{{config.name}}" method="post">
         <div class="form-group">
-            <textarea name="value" id="value">{{config.value}}</textarea>
+          <input name="name" class="form-control" id="name" placeholder="Config name" value="{{config.name}}" />
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" name="value" id="value">{{config.value}}</textarea>
         </div>
         <button class="btn btn-primary" type="submit">Save</button>
+        <input type="button" class="btn btn-danger float-right" onclick="deleteConfig()" value="Delete" />
     </form>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script>
+function deleteConfig() {
+    if (confirm('Are you sure you want to delete this config?')) {
+        $.ajax({
+            url: "{{url_for('admin_delete_config', config_id=config.name)}}",
+            type: 'DELETE',
+            success: function(result) {
+                window.location.href = "{{url_for('admin_configs')}}";
+            }
+        });
+    }
+}
+</script>
 </body>
 </html>

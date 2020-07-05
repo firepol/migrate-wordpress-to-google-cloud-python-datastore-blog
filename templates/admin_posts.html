@@ -26,25 +26,24 @@
       </tr>
     </thead>
     <tbody>
-  {% for p in posts %}
-  <tr>
-    <th scope="row">{{p.id}}</th>
-    <td class="text-nowrap">
-      <a href="/admin/post/{{p.id}}" class="btn btn-sm btn-primary">edit</a>
-      <a href="/admin/post/{{p.id}}?nl2br=1" class="btn btn-sm btn-secondary" title="Edit adding breaks">e2</a>
-    </td>
-    <td>
-      <a href="/{{p.slug}}/" target="_blank">{{ p.title }}</a>
-      {% if p.post_type == 'page' %}
-      <span class="badge badge-secondary">page</span>
-      {% endif %}
-    </td>
-    <td>
-      <a href="{{CONFIG['external_url']}}/{{p.slug}}" target="_blank" title="Open original post on {{CONFIG['external_url']}}/{{p.slug}}">view</a> {{p.comment_count}}
-    </td>
-  </tr>
-
-  {% endfor %}
+    {% for p in posts %}
+    <tr>
+      <th scope="row">{{p.id}}</th>
+      <td class="text-nowrap">
+        <a href="/admin/post/{{p.id}}" class="btn btn-sm btn-primary">edit</a>
+        <a href="/admin/post/{{p.id}}?nl2br=1" class="btn btn-sm btn-secondary" title="Edit adding breaks">e2</a>
+      </td>
+      <td>
+        <a href="/{{p.slug}}/" target="_blank">{{ p.title }}</a>
+        {% if p.post_type == 'page' %}
+        <span class="badge badge-secondary">page</span>
+        {% endif %}
+      </td>
+      <td>
+        <a href="{{CONFIG['external_url']}}/{{p.slug}}" target="_blank" title="Open original post on {{CONFIG['external_url']}}/{{p.slug}}">view</a> {{p.comment_count}}
+      </td>
+    </tr>
+    {% endfor %}
     </tbody>
   </table>
 </div>
