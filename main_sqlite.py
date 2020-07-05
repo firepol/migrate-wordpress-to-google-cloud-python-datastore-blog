@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from db_model import get_db_session
 from db_queries import get_published_posts, get_post
-from utils import clean_post
+from utils import fix_double_slash_escaping
 
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ def root():
 def render_post(slug):
     session = get_db_session()
     post = get_post(session, slug)
-    post.content = clean_post(post.content)
+    post.content = fix_double_slash_escaping(post.content)
     return render_template('post.html', post=post)
 
 

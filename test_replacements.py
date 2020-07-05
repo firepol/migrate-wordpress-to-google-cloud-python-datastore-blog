@@ -1,7 +1,7 @@
 import logging
 import os
 
-from migrate import remove_br_in_pre
+from utils import remove_br_in_pre
 
 FORMAT = "[%(asctime)s, %(levelname)s] %(message)s"
 logging.basicConfig(filename='test.log', level=logging.INFO, format=FORMAT)

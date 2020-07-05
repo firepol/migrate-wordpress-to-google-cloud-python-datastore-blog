@@ -1,13 +1,13 @@
-import locale
-import re
 import configparser
+import locale
 import sys
+
+from google.cloud import datastore
 
 from datastore_queries import insert_archive_by_post
 from db_model import get_db_session
 from db_queries import get_published_posts
-from google.cloud import datastore
-from utils import clean_post
+from utils import apply_all_cleanings
 
 settings = configparser.ConfigParser()
 settings.read('./data/settings.ini')
@@ -17,50 +17,6 @@ external_url = settings['blog_config']['external_url']  # This is the website UR
 blob_name_prefix = settings['blog_config']['blob_name_prefix']  # Instead of wp_uploads_dir, use this directory
 bucket_name = settings['blog_config']['google_cloud_bucket_name']
 bucket_host = 'https://storage.googleapis.com'
-
-_re_compiled = re.compile(r"<pre.*?>(.*?)</pre>", re.DOTALL)
-
-
-def nl2br(value):
-    # split(escape(value)) causes html tags to be escaped: just split without escaping
-    _paragraph_re = re.compile(r'(?:\r\n|\r(?!\n)|\n){2,}')
-    result = u'\n\n'.join(u'<p>%s</p>' % p.replace('\n', '<br>\n') \
-                          for p in _paragraph_re.split(value))
-    return result
-
-
-def replace_media_urls(content, old_url, new_url):
-    """
-    Fix URLs in content, replace them with a new URL with different prefix
-
-    >>> replace_media_urls('Check http://foo.bar/wp-content/uploads/foo.jpg or http://foo.bar',\
-    'http://foo.bar/wp-content/uploads/', 'https://storage.googleapis.com/media/')
-    'Check https://storage.googleapis.com/media/foo.jpg or http://foo.bar'
-    """
-
-    return content.replace(old_url, new_url)
-
-
-def replace_br_in_pre(content):
-    """
-    Fix URLs in content, replace them with a new URL with different prefix
-
-    >>> replace_br_in_pre('Check <pre> a b c <br> a b <br></pre> a b <br> c')
-    'Check <pre> a b c  a b </pre> a b  c'
-    """
-
-    return content.replace('<br>', '')
-
-
-def remove_br_in_pre(content):
-    """
-    Fix URLs in content, replace them with a new URL with different prefix
-
-    >>> remove_br_in_pre('Check <pre> a b c <br> a b <br></pre> a b <br> c <pre>final<br></pre>')
-    'Check <pre> a b c  a b </pre> a b <br> c <pre>final</pre>'
-    """
-
-    return re.sub(_re_compiled, lambda match: replace_br_in_pre(match.group()), content)
 
 
 def save_configs_to_datastore():
@@ -103,11 +59,10 @@ def save_posts_to_datastore():
         item['modified'] = p.modified.isoformat()
         item['comment_count'] = p.comment_count
 
-        item['content'] = clean_post(p.content)
-        item['content'] = nl2br(item['content'])
-        item['content'] = replace_media_urls(item['content'], f'{external_url}/{wp_uploads_dir}',
-                                             f'{bucket_host}/{bucket_name}/{blob_name_prefix}')
-        item['content'] = remove_br_in_pre(item['content'])
+        clean_content = apply_all_cleanings(p.content)
+        # Replace old wp_uploads URL with new google bucket URL
+        item['content'] = clean_content.replace(f'{external_url}/{wp_uploads_dir}',
+                                                f'{bucket_host}/{bucket_name}/{blob_name_prefix}')
 
         client.put(item)
 

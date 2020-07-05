@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, abort
 from jinja2 import evalcontextfilter, Markup, escape
 
 from datastore_queries import *
-from utils import replace_pre
+from utils import prettyprint_pre
 
 app = Flask(__name__)
 app.jinja_env.globals['CONFIG'] = get_config_dictionary()
@@ -49,8 +49,8 @@ def render_post(slug):
     if slug == 'favicon.ico':
         return ''
     post = get_post(slug)
-    # post['content'] = clean_post(post['content'])
-    post['content'] = replace_pre(post['content'])
+    # post['content'] = fix_double_slash_escaping(post['content'])
+    post['content'] = prettyprint_pre(post['content'])
     return render_template(f"{post['post_type']}.html", post=post)
 
 
