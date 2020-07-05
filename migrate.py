@@ -18,6 +18,8 @@ blob_name_prefix = settings['blog_config']['blob_name_prefix']  # Instead of wp_
 bucket_name = settings['blog_config']['google_cloud_bucket_name']
 bucket_host = 'https://storage.googleapis.com'
 
+_re_compiled = re.compile(r"<pre.*?>(.*?)</pre>", re.DOTALL)
+
 
 def nl2br(value):
     # split(escape(value)) causes html tags to be escaped: just split without escaping
@@ -37,6 +39,28 @@ def replace_media_urls(content, old_url, new_url):
     """
 
     return content.replace(old_url, new_url)
+
+
+def replace_br_in_pre(content):
+    """
+    Fix URLs in content, replace them with a new URL with different prefix
+
+    >>> replace_br_in_pre('Check <pre> a b c <br> a b <br></pre> a b <br> c')
+    'Check <pre> a b c  a b </pre> a b  c'
+    """
+
+    return content.replace('<br>', '')
+
+
+def remove_br_in_pre(content):
+    """
+    Fix URLs in content, replace them with a new URL with different prefix
+
+    >>> remove_br_in_pre('Check <pre> a b c <br> a b <br></pre> a b <br> c <pre>final<br></pre>')
+    'Check <pre> a b c  a b </pre> a b <br> c <pre>final</pre>'
+    """
+
+    return re.sub(_re_compiled, lambda match: replace_br_in_pre(match.group()), content)
 
 
 def save_configs_to_datastore():
@@ -79,12 +103,11 @@ def save_posts_to_datastore():
         item['modified'] = p.modified.isoformat()
         item['comment_count'] = p.comment_count
 
-        content = clean_post(p.content)
-        nl2br_content = nl2br(content)
-
-        item['content'] = nl2br_content
+        item['content'] = clean_post(p.content)
+        item['content'] = nl2br(item['content'])
         item['content'] = replace_media_urls(item['content'], f'{external_url}/{wp_uploads_dir}',
                                              f'{bucket_host}/{bucket_name}/{blob_name_prefix}')
+        item['content'] = remove_br_in_pre(item['content'])
 
         client.put(item)
 
