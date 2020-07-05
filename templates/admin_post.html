@@ -53,9 +53,9 @@
       mode : 'exact',
       selector: '#content',
       height: '600',
-      plugins: 'lists wordcount powerpaste table advtable advcode link image',
+      plugins: '{{CONFIG["tinymce_plugins"]}}',
       tools: { title: 'Tools', items: 'code wordcount' },
-      toolbar: 'undo redo | styleselect | bold italic | link image | code | removeformat',
+      toolbar: 'undo redo | styleselect | bold italic | link image | code codesample | removeformat',
       menu: {
         format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat' }
       }
