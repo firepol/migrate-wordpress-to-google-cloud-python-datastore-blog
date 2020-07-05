@@ -71,6 +71,10 @@ Run the *main - test confiuration* created above.
 - browse to http://localhost:8080
 - browse to http://localhost:8080/admin/ to see the work in progress admin panel to add and edit pages and posts.
 
+## Various
+
+To fix the page displayed in the home, the page slug must be `home`. In my case the homepage slug was `sample-page` (from an old WordPress installation, where I edited the content of the existing sample-page to make my home). To do so, browse to the `admin` area > `Edit posts` > Edit the page > name the slug `home`.
+
 ## Work in progress ##
 
 This project is heavily work in progress. Use it at your own risk. This documentation needs to be tested and rewritten. If in the meantime you test this and it works for you, please drop me a line in the Issues page, feedback is always welcome.
