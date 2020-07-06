@@ -14,12 +14,16 @@ def fix_double_slash_escaping(content):
         .replace('\\"', '"')
 
 
-def prettyprint_pre(content):
+def clean_pre(content):
     """
-    Add class="prettyprint" to <pre> tags. This will make the prettyprint plugin work.
+    Clean old <pre> tags with old classes and convert them to <pre><code>
     """
-    return content.replace(u'<pre class="lang:default decode:true ">', '<pre class="prettyprint">')\
-        .replace(u'<pre class="lang:default decode:true">', '<pre class="prettyprint">')
+    result = re.sub(r'<pre class=\"lang.*?>', '<pre>', content)
+    result = result.replace('<pre>', '<pre><code>')
+    result = result.replace('</pre>', '</code></pre>')
+    result = result.replace('<code><code>', '<code>')
+    result = result.replace('</code></code>', '</code>')
+    return result
 
 
 def nl2br(content):

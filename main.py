@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, abort
 from jinja2 import evalcontextfilter, Markup, escape
 
 from datastore_queries import *
-from utils import prettyprint_pre
+from utils import clean_pre
 
 app = Flask(__name__)
 
@@ -59,7 +59,7 @@ def render_post(slug):
         return ''
     post = get_post(slug)
     # post['content'] = fix_double_slash_escaping(post['content'])
-    post['content'] = prettyprint_pre(post['content'])
+    post['content'] = clean_pre(post['content'])
     return render_template(f"{post['post_type']}.html", post=post)
 
 
