@@ -3,7 +3,7 @@ import re
 
 
 def apply_all_cleanings(content):
-    return remove_br_in_pre(nl2br(fix_double_slash_escaping(content)))
+    return remove_br_in_ul(remove_br_in_pre(nl2br(fix_double_slash_escaping(content))))
 
 
 def fix_double_slash_escaping(content):
@@ -45,4 +45,15 @@ def remove_br_in_pre(content):
     'Check <pre> a b c  a b </pre> a b <br> c <pre>final</pre>'
     """
     _re_content_in_pre = re.compile(r"<pre.*?>(.*?)</pre>", re.DOTALL)
+    return re.sub(_re_content_in_pre, lambda match: match.group().replace('<br>', ''), content)
+
+
+def remove_br_in_ul(content):
+    """
+    Get rid of <br> inside <ul> lists
+
+    >>> remove_br_in_ul('<ul><li>abc<br></li></ul>')
+    '<ul><li>abc</li></ul>'
+    """
+    _re_content_in_pre = re.compile(r"<ul>(.*?)</ul>", re.DOTALL)
     return re.sub(_re_content_in_pre, lambda match: match.group().replace('<br>', ''), content)
