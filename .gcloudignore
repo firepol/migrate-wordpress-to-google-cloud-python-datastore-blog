@@ -14,11 +14,20 @@
 .gitignore
 
 .idea/
+.pytest_cache/
 data/
 db/
 keys/
+samples/
+venv/
+db_init.py
 db_model.py
 db_queries.py
-migrate.py
+db_queries_admin.py
 main_sqlite.py
-venv/
+migrate.py
+test_replacements.py
+upload.py
+LICENSE
+README.md
+*.log

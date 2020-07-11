@@ -4,7 +4,7 @@ import sys
 
 from google.cloud import datastore
 
-from datastore_queries import insert_archive_by_post
+from datastore_queries_admin import insert_archive_by_post
 from db_model import get_db_session
 from db_queries import get_published_posts
 from utils import apply_all_cleanings

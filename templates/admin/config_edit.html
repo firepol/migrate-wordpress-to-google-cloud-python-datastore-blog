@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="container">
-    <h1><a href="/admin/configs/">Admin Configs</a></h1>
+    <h1><a href="{{url_for('admin.configs')}}">Admin Configs</a></h1>
     <form action="/admin/config/{{config.name}}" method="post">
         <div class="form-group">
           <input name="name" class="form-control" id="name" placeholder="Config name" value="{{config.name}}" />
@@ -27,10 +27,10 @@
 function deleteConfig() {
     if (confirm('Are you sure you want to delete this config?')) {
         $.ajax({
-            url: "{{url_for('admin_delete_config', config_id=config.name)}}",
+            url: "{{url_for('admin.config_delete', config_id=config.name)}}",
             type: 'DELETE',
             success: function(result) {
-                window.location.href = "{{url_for('admin_configs')}}";
+                window.location.href = "{{url_for('admin.configs')}}";
             }
         });
     }

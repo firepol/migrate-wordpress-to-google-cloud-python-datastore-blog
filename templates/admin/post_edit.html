@@ -64,10 +64,10 @@ tinymce.init({
 function deletePost() {
     if (confirm('Are you sure you want to delete this post?')) {
         $.ajax({
-            url: "{{url_for('admin_delete_post', post_id=post.id)}}",
+            url: "{{url_for('admin.post_delete', post_id=post.id)}}",
             type: 'DELETE',
             success: function(result) {
-                window.location.href = "{{url_for('admin_posts')}}";
+                window.location.href = "{{url_for('admin.posts')}}";
             }
         });
     }
