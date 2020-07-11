@@ -1,3 +1,4 @@
+import configparser
 from flask import Flask, render_template
 from db_model import get_db_session
 from db_queries import get_published_posts, get_post
@@ -7,21 +8,24 @@ from utils import fix_double_slash_escaping
 
 app = Flask(__name__)
 
+ini = configparser.ConfigParser()
+ini.read('./data/settings.ini')
+app.jinja_env.globals['CONFIG'] = ini['blog_config']
+
 
 @app.route('/')
-def root():
+def posts_list():
     session = get_db_session()
     posts = get_published_posts(session)
-    return render_template('posts_list_sqlite.html', posts=posts)
-    # return render_template('index_sqlite.html', posts=posts)
+    return render_template('posts_list.html', posts=posts)
 
 
 @app.route('/<slug>')
-def render_post(slug):
+def post(slug):
     session = get_db_session()
-    post = get_post(session, slug)
-    post.content = fix_double_slash_escaping(post.content)
-    return render_template('post.html', post=post)
+    result = get_post(session, slug)
+    result.content = fix_double_slash_escaping(result.content)
+    return render_template('post.html', post=result)
 
 
 if __name__ == '__main__':
