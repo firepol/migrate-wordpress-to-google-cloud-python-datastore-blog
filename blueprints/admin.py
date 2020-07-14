@@ -1,13 +1,15 @@
 from flask import Blueprint, render_template, abort, request, redirect, url_for, current_app
+from flask_login import login_required
 
 from datastore_queries import get_all_posts
 from datastore_queries_admin import *
 from utils_flask import refresh_config
 
-admin = Blueprint('admin', __name__, url_prefix='/admin', template_folder='templates/admin')
+admin = Blueprint('admin', __name__, url_prefix='/admin', template_folder='../templates/admin')
 
 
 @admin.route('/')
+@login_required
 def admin_home():
     return render_template('index_admin.html')
 
@@ -15,12 +17,14 @@ def admin_home():
 # ADMIN CONFIGS
 
 @admin.route('/configs/')
+@login_required
 def configs():
     result = get_configs()
     return render_template('configs.html', configs=result)
 
 
 @admin.route('/config/<config_id>')
+@login_required
 def config_edit(config_id):
     if config_id == 'new':
         config = {
@@ -33,6 +37,7 @@ def config_edit(config_id):
 
 
 @admin.route('/config/<config_id>', methods=['POST'])
+@login_required
 def config_save(config_id):
     request_form = request.form
     config = update_config(config_id, request_form)
@@ -41,6 +46,7 @@ def config_save(config_id):
 
 
 @admin.route('/config/delete/<config_id>', methods=['DELETE'])
+@login_required
 def config_delete(config_id):
     try:
         delete_config(config_id)
@@ -53,12 +59,14 @@ def config_delete(config_id):
 # ADMIN POSTS
 
 @admin.route('/posts/')
+@login_required
 def posts():
     result = get_all_posts()
     return render_template('posts.html', posts=result)
 
 
 @admin.route('/post/<post_id>')
+@login_required
 def post_edit(post_id):
     if post_id == 'new':
         post = {
@@ -70,6 +78,7 @@ def post_edit(post_id):
 
 
 @admin.route('/post/<post_id>', methods=['POST'])
+@login_required
 def post_save(post_id):
     request_form = request.form
     post = update_post(post_id, request_form)
@@ -77,6 +86,7 @@ def post_save(post_id):
 
 
 @admin.route('/post/delete/<post_id>', methods=['DELETE'])
+@login_required
 def post_delete(post_id):
     try:
         delete_post(post_id)
@@ -86,6 +96,7 @@ def post_delete(post_id):
 
 
 @admin.route('/insert_archives')
+@login_required
 def insert_archives():
     result = get_all_posts('post')
     insert_archives(result)
@@ -93,6 +104,7 @@ def insert_archives():
 
 
 @admin.route('/delete_all')
+@login_required
 def delete_all():
     delete_all_blog_entities()
     return 'All configs, posts and archives deleted'
