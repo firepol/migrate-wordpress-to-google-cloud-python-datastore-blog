@@ -95,6 +95,17 @@ def post_delete(post_id):
         abort(500)
 
 
+# ADMIN USERS
+
+@admin.route('/users/')
+@login_required
+def users():
+    result = get_users()
+    return render_template('users.html', users=result)
+
+# DELETE
+
+
 @admin.route('/insert_archives')
 @login_required
 def insert_archives():

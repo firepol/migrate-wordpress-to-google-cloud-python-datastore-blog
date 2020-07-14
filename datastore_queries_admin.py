@@ -91,6 +91,12 @@ def get_post_by_id(post_id):
     return client.get(key)
 
 
+def get_users():
+    client = datastore.Client()
+    query = client.query(kind='User')
+    return query.fetch()
+
+
 def delete_all_blog_entities():
     client = datastore.Client()
     delete_all_entities_by_kind(client, 'Config')

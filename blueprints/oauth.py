@@ -1,12 +1,16 @@
 import json
+import logging
 import os
 
 import requests
-from flask import Blueprint, request, redirect, url_for
+from flask import Blueprint, request, redirect, url_for, current_app
 from flask_login import current_user, login_required, logout_user, login_user
 from oauthlib.oauth2 import WebApplicationClient
 
 from user import User
+
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger()
 
 oauth = Blueprint('oauth', __name__, template_folder='../templates/oauth')
 
@@ -19,6 +23,16 @@ oauth_client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 # This import has to be here, else import error (circular dependency)
 from main import login_manager
+
+
+def is_admin(user_id):
+    config = current_app.jinja_env.globals['CONFIG']
+    admins = config['user_ids_admins']
+    if admins is not None:
+        admins_list = admins.replace(' ', '').split(',')
+        if user_id in admins_list:
+            return True
+    return False
 
 
 def get_google_provider_cfg():
@@ -86,17 +100,21 @@ def callback():
     userinfo_response = requests.get(uri, headers=headers, data=body)
 
     if userinfo_response.json().get('email_verified'):
-        unique_id = userinfo_response.json()['sub']
-        users_email = userinfo_response.json()['email']
+        user_id = userinfo_response.json()['sub']
+        email = userinfo_response.json()['email']
         picture = userinfo_response.json()['picture']
-        users_name = userinfo_response.json()['given_name']
+        name = userinfo_response.json()['given_name']
     else:
         return 'User email not available or not verified by Google.', 400
 
-    user = User(id=unique_id, name=users_name, email=users_email, profile_pic=picture)
+    user = User(id=user_id, name=name, email=email, profile_pic=picture)
 
-    if not User.get(unique_id):
-        User.create(user)
+    if not User.get(user_id):
+        if not is_admin(user_id):
+            log.warning(f'{user_id}, {email}, {name}: is not in the admins list; access not granted')
+            return 'Login unsuccessful', 403
+        else:
+            User.create(user)
 
     login_success = login_user(user)
     if not login_success:
