@@ -67,13 +67,17 @@ Work in progress.
 
 ## Test your blog locally ##
 
-Run the *main - test confiuration* created above.
+Run the *main - test configuration* created above.
 - browse to http://localhost:8080
 - browse to http://localhost:8080/admin/ to see the work in progress admin panel to add and edit pages and posts.
 
 ## Various
 
 To fix the page displayed in the home, the page slug must be `home`. In my case the homepage slug was `sample-page` (from an old WordPress installation, where I edited the content of the existing sample-page to make my home). To do so, browse to the `admin` area > `Edit posts` > Edit the page > name the slug `home`.
+
+## Errors/Debugging
+
+https://console.cloud.google.com/errors
 
 ## Work in progress ##
 
