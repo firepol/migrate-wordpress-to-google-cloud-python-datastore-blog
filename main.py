@@ -33,6 +33,7 @@ app.register_blueprint(oauth)
 app.register_blueprint(admin)
 
 
+@app.template_filter()
 def datetimeformat(value, format='%Y-%m-%d'):
     return value.strftime(format)
 
@@ -49,7 +50,6 @@ def nl2br(eval_ctx, value):
 
 
 if __name__ == '__main__':
-    app.jinja_env.filters['datetimeformat'] = datetimeformat
     app.run(
         ssl_context='adhoc',
         host='localhost',
