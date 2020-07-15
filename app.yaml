@@ -1,5 +1,9 @@
 runtime: python37
 
+env_variables:
+  GOOGLE_CLIENT_ID: %GOOGLE_CLIENT_ID%
+  GOOGLE_CLIENT_SECRET: %GOOGLE_CLIENT_SECRET%
+
 handlers:
   # This configures Google App Engine to serve the files in the app's static
   # directory.
