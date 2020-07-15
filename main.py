@@ -7,10 +7,12 @@ from jinja2 import evalcontextfilter
 from markupsafe import escape, Markup
 
 from user import User
-from utils_flask import refresh_config
+from utils_flask import set_global_config
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
+app.secret_key = os.environ.get('SECRET_KEY') or os.urandom(24)
+
+set_global_config(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -47,7 +49,6 @@ def nl2br(eval_ctx, value):
 
 
 if __name__ == '__main__':
-    refresh_config(app)
     app.jinja_env.filters['datetimeformat'] = datetimeformat
     app.run(
         ssl_context='adhoc',

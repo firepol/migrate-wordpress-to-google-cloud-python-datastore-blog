@@ -1,7 +1,7 @@
 from datastore_queries import get_config_dictionary
 
 
-def refresh_config(app):
+def set_global_config(app):
     """
     Set or refresh the CONFIG dictionary (used in templates) based on datastore Config entities
     """

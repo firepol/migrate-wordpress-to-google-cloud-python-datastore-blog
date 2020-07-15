@@ -3,7 +3,7 @@ from flask_login import login_required
 
 from datastore_queries import get_all_posts
 from datastore_queries_admin import *
-from utils_flask import refresh_config
+from utils_flask import set_global_config
 
 admin = Blueprint('admin', __name__, url_prefix='/admin', template_folder='../templates/admin')
 
@@ -41,7 +41,7 @@ def config_edit(config_id):
 def config_save(config_id):
     request_form = request.form
     config = update_config(config_id, request_form)
-    refresh_config(current_app)
+    set_global_config(current_app)
     return redirect(url_for('admin.config_edit', config_id=config.key.id_or_name))
 
 
@@ -50,7 +50,7 @@ def config_save(config_id):
 def config_delete(config_id):
     try:
         delete_config(config_id)
-        refresh_config(current_app)
+        set_global_config(current_app)
         return '', 204
     except:
         abort(500)
