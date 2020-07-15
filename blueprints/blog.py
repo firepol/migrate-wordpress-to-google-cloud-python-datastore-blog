@@ -1,9 +1,13 @@
 import calendar
+import logging
 
 from flask import Blueprint, render_template
 
 from datastore_queries import get_post, get_all_posts, get_archives, get_posts_by_archive
 from utils import clean_pre
+
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger()
 
 blog = Blueprint('blog', __name__, template_folder='../templates')
 
@@ -21,6 +25,9 @@ def post(slug):
     if slug == 'favicon.ico':
         return ''
     result = get_post(slug)
+    if not result:
+        log.info(f'No content for `{slug}`')
+        return f'Page `{slug}` not found', 404
     result['content'] = clean_pre(result['content'])
     return render_template(f"{result['post_type']}.html", post=result)
 
