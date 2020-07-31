@@ -20,12 +20,10 @@ In **phpMyAdmin** > export:
 - **Export method**: select `Custom - display all possible options`
 - **Format**: select `CSV`
 - **Tables**: check just the `wp_posts` table
-- **Format-specific options**: check `Put columns names in the first row`
-- Save the file in the `data/` folder, then edit its name in the `settings.ini` file `[config] > wp_posts_csv_path` option (by default it's `data/wp_posts.csv`)
 
 ## Configure your blog settings
 
-My solution expects a folder called `data` and a `settings.ini` file in it. Simply rename the `samples` folder to `data` and edit the `settings.ini` file in it. If you do not use google analytics, leave the `google_analytics_code` empty, else add your code. For TinyMCE, you must get your own key at https://www.tiny.cloud/
+My solution expects a folder called `data` and a `settings.ini` file in it. Simply rename the `samples` folder to `data` and edit the `settings.ini` file in it.
 
 ## Import the CSV in a local SQLite database
 
@@ -69,7 +67,37 @@ Work in progress.
 
 Run the *main - test configuration* created above.
 - browse to http://localhost:8080
-- browse to http://localhost:8080/admin/ to see the work in progress admin panel to add and edit pages and posts.
+- browse to http://localhost:8080/admin/ to see the admin panel (to add and edit pages, posts and configurations). This works only after configuring correctly the authentication (see below: Set up Google Login).
+
+## Set up Google Login
+
+See [Google Login Flask tutorial](https://realpython.com/flask-google-login/).
+
+Create a client for local testing purposes, then create one for your production website. The steps are the same. Just the URLs will differ if you use a different port and in prod, you will use your domain name.
+
+Note, when you deploy your files in "prod", if you did not associate the app to a custom domain, you will have a domain similar to this: https://project-id.oa.r.appspot.com (you can see the URL in the [appengine dashboard](https://console.cloud.google.com/appengine), but only after deploying it for th first time).
+
+In prod you can use this URL and also your custom domain name.
+
+- Configure the consent screen for your project
+  - In the `Authorized domains` add your domain(s), e.g. https://project-id.oa.r.appspot.com and also your custom domain.
+- Create a [Google oauth client](https://console.developers.google.com/apis/credentials)
+  - Name it e.g. `Test client`
+  - URIs: `https://localhost:8080`
+  - Authorized redirect URIs: `https://localhost:8080/login/callback`
+  - Note client ID and secret somewhere safe (e.g. in a keepass encrypted file)
+  - Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in the Environment variables of your `main - test` configuration
+
+Repeat the same process, later, for your production domain (you can re-use the same consent screen if you want, but it's a good idea to separate the test clint from the prod client).
+
+## Depploy the app
+
+- [Enable Cloud Build](https://console.developers.google.com/apis/api/cloudbuild.googleapis.com/overview) for your project (this requires you to associate your project to a billing account)
+- Run `gcloud --project=PROJECT-ID datastore indexes create index.yaml` to create the necessary indexes for datastore
+- Copy the `app.yaml` file to `data/app.yaml` (you can have several .yaml files for different environments/projects, so you can name the file accordingly) and set the client id and secret.
+- Run `mv data/pbworks.yaml .; gcloud app deploy --project=pbworks ./pbworks.yaml; mv pbworks.yaml data/`
+  - Note: if you specify the `app.yaml` file in a subfolder, it will deploy the contents of the subfolder where the yaml file is located, so I move the file in the app folder, deploy, then move it back to the data folder.
+  - If it's the first deployment, you will see a screen allowing you the location where to host your app. Choose wisely, e.g. if you live in Europe, but your audience is mostly come from USA, choose a location in the US. check also [Cloud Locations](https://cloud.google.com/about/locations) and see which products are available, e.g. I chose `us-east4`. You can also check the cost. But if you plan to host a small website with not many hits, the const will be free anyway.
 
 ## Various
 
