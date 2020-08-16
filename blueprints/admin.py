@@ -1,9 +1,15 @@
-from flask import Blueprint, render_template, abort, request, redirect, url_for, current_app
+import logging
+
+from flask import Blueprint, render_template, abort, request, redirect, url_for, current_app, flash
 from flask_login import login_required
 
 from datastore_queries import get_all_posts
 from datastore_queries_admin import *
 from utils_flask import set_global_config
+from utils_google_cloud_bucket import upload_to_bucket
+
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger()
 
 admin = Blueprint('admin', __name__, url_prefix='/admin', template_folder='../templates/admin')
 
@@ -93,6 +99,32 @@ def post_delete(post_id):
         return '', 204
     except:
         abort(500)
+
+
+# UPLOAD
+
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@admin.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:  # check if the post request has the file part
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['file']
+    if file.filename == '':  # if user selects no file, browser also submits an empty part without filename
+        flash('No selected file')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        blob_public_url = upload_to_bucket(file)
+        return {
+            'location': blob_public_url
+        }
 
 
 # ADMIN USERS
