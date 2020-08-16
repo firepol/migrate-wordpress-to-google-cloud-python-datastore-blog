@@ -1,11 +1,12 @@
 import warnings
 
-import configparser
-from sqlalchemy import Column, String, Integer, Date, DateTime, Text
+from sqlalchemy import Column, String, Integer, DateTime, Text
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SAWarning
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+from tools.local_utils import get_settings
 
 warnings.filterwarnings('ignore', r".*support Decimal objects natively", SAWarning, r'^sqlalchemy\.sql\.sqltypes$')
 
@@ -28,10 +29,8 @@ class Post(Base):
     comment_count = Column(Integer, nullable=False)
 
 
-settings = configparser.ConfigParser()
-settings.read('./data/settings.ini')
-
 # Engine is called each time db_model is imported
+settings = get_settings()
 engine = create_engine(settings['config']['db_url'])
 Base.metadata.create_all(engine)
 

@@ -1,4 +1,4 @@
-from db_model import Post
+from db.db_model import Post
 
 
 def get_published_posts(session, post_type=None):

@@ -5,12 +5,12 @@ import sys
 from google.cloud import datastore
 
 from datastore_queries_admin import insert_archive_by_post
-from db_model import get_db_session
-from db_queries import get_published_posts
+from db.db_model import get_db_session
+from db.db_queries import get_published_posts
+from tools.local_utils import get_settings
 from utils import apply_all_cleanings
 
-settings = configparser.ConfigParser()
-settings.read('./data/settings.ini')
+settings = get_settings()
 
 wp_uploads_dir = 'wp-content/uploads'  # WordPress has all the uploads in this relative directory
 external_url = settings['blog_config']['external_url']  # This is the website URL (assuming new website is the same)

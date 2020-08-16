@@ -6,8 +6,9 @@ import configparser
 
 import click
 
-settings = configparser.ConfigParser()
-settings.read('./data/settings.ini')
+from tools.local_utils import get_settings
+
+settings = get_settings()
 config = settings['config']
 
 
@@ -15,7 +16,7 @@ def create_wp_posts_table(db_file_path):
     print(f'Creating `{db_file_path}` DB with the `wp_posts` table to be used to import your WordPress posts...')
     connection = sqlite3.connect(db_file_path)
     cursor = connection.cursor()
-    with open('db/create_wp_posts.sql') as sql_file:
+    with open('create_wp_posts.sql') as sql_file:
         sql_as_string = sql_file.read()
         cursor.executescript(sql_as_string)
 

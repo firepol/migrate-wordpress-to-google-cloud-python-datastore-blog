@@ -1,15 +1,15 @@
 import configparser
 from flask import Flask, render_template
-from db_model import get_db_session
-from db_queries import get_published_posts, get_post
+from db.db_model import get_db_session
+from db.db_queries import get_published_posts, get_post
 from main import datetimeformat
+from tools.local_utils import get_settings
 from utils import fix_double_slash_escaping
 
 
 app = Flask(__name__)
 
-ini = configparser.ConfigParser()
-ini.read('./data/settings.ini')
+ini = get_settings()
 app.jinja_env.globals['CONFIG'] = ini['blog_config']
 
 

@@ -1,13 +1,12 @@
 import logging
 import os
-
-import configparser
 import time
 from concurrent import futures
 from multiprocessing import cpu_count
 
 from google.cloud import storage
 
+from tools.local_utils import get_settings
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger()
@@ -18,8 +17,7 @@ def get_elapsed_seconds(start_time):
 
 
 def get_upload_variables():
-    settings = configparser.ConfigParser()
-    settings.read('./data/settings.ini')
+    settings = get_settings()
     bucket_name = settings['blog_config']['google_cloud_bucket_name']
     source_root = settings['config']['wp_uploads_path']
     blob_name_prefix = settings['blog_config']['blob_name_prefix']
@@ -75,6 +73,8 @@ def upload_files_to_bucket_in_parallel():
         log.info(f'Processing directory: {subdir}')
         for file in files:
             files_count += 1
+            if files_count > max_files_to_upload:
+                break
             upload = pool.submit(upload_file_to_bucket, source_root, subdir, file, bucket, blob_name_prefix)
             uploads.append(upload)
 
@@ -98,5 +98,6 @@ def upload_files_to_bucket_in_parallel():
     log.info(f'Uploaded a total of {files_count} files in {elapsed_time} seconds')
 
 
-# upload_files_to_bucket()
-upload_files_to_bucket_in_parallel()
+if __name__ == '__main__':
+    # upload_files_to_bucket()
+    upload_files_to_bucket_in_parallel()

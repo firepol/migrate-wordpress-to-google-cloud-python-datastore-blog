@@ -21,14 +21,8 @@ db/
 keys/
 samples/
 venv/
-db_init.py
-db_model.py
-db_queries.py
-db_queries_admin.py
-main_sqlite.py
-migrate.py
+tools/
 test_replacements.py
-upload.py
 LICENSE
 README.md
 *.log

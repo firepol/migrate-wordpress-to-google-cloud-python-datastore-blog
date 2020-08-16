@@ -55,12 +55,12 @@ Work in progress.
 - In a command line, run: `gcloud beta emulators datastore start`. Note the line that says (e.g. in my case) `export DATASTORE_EMULATOR_HOST=localhost:8081`
 - In [Jetbrains pyCharm](https://www.jetbrains.com/pycharm/), open this git repository.
 - Create a python environment when asked (select `python3.7`), or do it later if you skipped the step.
-- Click on the `migrate.py` file and in the **Run** menu click on **Run** > **Edit Configurations** > in the **Environment Variables** set:
+- Click on the `tools/migrate.py` file and in the **Run** menu click on **Run** > **Edit Configurations** > in the **Environment Variables** set:
   - `GOOGLE_APPLICATION_CREDENTIALS`: path to the key file you saved inside the `keys` folder
   - `DATASTORE_PROJECT_ID`: your google cloud project id
   - `DATASTORE_EMULATOR_HOST`: the URL you see when you run `gcloud beta emulators datastore start` command, as described above
 - Save the configuration with a name such as *migrate - test*.
-- Duplicate the configuration and in the **Script path** rename `migrate.py` to `main.py` and name it e.g. *main - test*.
+- Duplicate the configuration and in the **Script path** rename `migrate` to `main` and name it e.g. *main - test*.
 - Run the *migrate - test* configuration: this will save all your pages and posts from the sqlite database to your local emulated datastore.
 
 ## Test your blog locally ##
