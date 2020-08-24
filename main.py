@@ -6,11 +6,15 @@ from flask_login import LoginManager
 from jinja2 import evalcontextfilter
 from markupsafe import escape, Markup
 
+from configuration import LOCAL_DEVELOPMENT_MODE
 from user import User
 from utils_flask import set_global_config
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY') or os.urandom(24)
+
+if LOCAL_DEVELOPMENT_MODE:
+    app.config['LOGIN_DISABLED'] = True
 
 set_global_config(app)
 
@@ -50,8 +54,9 @@ def nl2br(eval_ctx, value):
 
 
 if __name__ == '__main__':
+    ssl_context = None if LOCAL_DEVELOPMENT_MODE else 'adhoc'
     app.run(
-        ssl_context='adhoc',
+        ssl_context=ssl_context,
         host='localhost',
         port=8080,
         debug=True
