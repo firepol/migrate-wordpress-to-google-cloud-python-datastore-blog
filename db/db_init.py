@@ -31,13 +31,15 @@ def create_wp_posts_table(db_file_path):
     connection.close()
 
 
-db_url = config['db_url']
-db_file = db_url.replace('sqlite:///', '')
+if __name__ == '__main__':
+    db_url = config['db_url']
+    db_file = db_url.replace('sqlite:///', '')
 
-db_exists = False
-if os.path.isfile(db_file):
-    db_exists = True
-    if click.confirm(f'This will delete `wp_posts` and create the table again. Do you want to proceed?', default=True):
+    db_exists = False
+    if os.path.isfile(db_file):
+        db_exists = True
+        if click.confirm(f'This will delete `wp_posts` and create the table again. Do you want to proceed?',
+                         default=True):
+            create_wp_posts_table(db_file)
+    else:
         create_wp_posts_table(db_file)
-else:
-    create_wp_posts_table(db_file)
