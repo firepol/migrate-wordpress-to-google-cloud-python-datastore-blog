@@ -1,4 +1,3 @@
-import configparser
 from flask import Flask, render_template
 from db.db_model import get_db_session
 from db.db_queries import get_published_posts, get_post

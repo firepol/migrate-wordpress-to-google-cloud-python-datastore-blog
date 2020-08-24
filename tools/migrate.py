@@ -1,4 +1,3 @@
-import configparser
 import locale
 import sys
 

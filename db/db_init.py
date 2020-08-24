@@ -2,8 +2,6 @@ import csv
 import os
 import sqlite3
 
-import configparser
-
 import click
 
 from tools.local_utils import get_settings
