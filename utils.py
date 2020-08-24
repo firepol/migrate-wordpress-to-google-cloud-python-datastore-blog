@@ -32,7 +32,7 @@ def nl2br(content):
     """
     # split(escape(value)) causes html tags to be escaped: just split without escaping
     _paragraph_re = re.compile(r'(?:\r\n|\r(?!\n)|\n){2,}')
-    result = u'\n\n'.join(u'<p>%s</p>' % p.replace('\n', '<br>\n')\
+    result = u'\n\n'.join(u'<p>%s</p>' % p.replace('\n', '<br>\n')
                           for p in _paragraph_re.split(content))
     return result
 
