@@ -4,6 +4,8 @@ For various reasons I wanted to stop using wordpress and host my own blog and pe
 
 Using an SQL database is "cheap" but still costs a few bucks per month. So I decided to use google datastore, which has a free quota of 50'000 queries per month, then it costs still less than a real database.
 
+See [nomnoml diagram](http://www.nomnoml.com/#view/%5BWordPress%5D-%5BMySQL%20DB%5D%0A%5BWordPress%5D-%5BWordPress%20Pictures%5D%0A%0A%5BMySQL%20DB%5Dexport-%3E%5BCSV%5D%0A%0A%5BCSV%5D-%3Edb_init%5BSQLite%5D%0A%0A%5BSQLite%5Dmigrate-%3E%5BDatastore%5D%0A%0A%5Bsettings.ini%5Dmigrate-%3E%5BDatastore%5D%0A%0A%5BSQLite%5D-%5BTemp%20Blog%5D%0A%5Bsettings.ini%5D-%5BTemp%20Blog%5D%0A%0A%5BDatastore%7C%0A-%20Posts%0A-%20Configs%5D%0A%0A%5BWordPress%20Pictures%5Dupload-%3E%5BBucket%5D%0A%0A%5BDatastore%5D-%5BPython%20Blog%5D%0A%5BBucket%5D-%5BPython%20Blog%5D)
+
 ## Getting started
 
 - If you are new to Google Cloud, install the SDK, set up your environment and accounts as described in the [Quickstart for Python 3 in the App Engine Standard Environment](https://cloud.google.com/appengine/docs/standard/python3/quickstart) documentation. Make sure that you installed these components:
