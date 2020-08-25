@@ -1,8 +1,12 @@
 # Python blog hosted on google cloud appengine standard and using datastore
 
-For various reasons I wanted to stop using wordpress and host my own blog and personal website using a custom solution coded by me, hosted on google appengine (python standard environment).
+For various reasons I wanted to stop using wordpress and manage my own blog and personal website using a custom solution coded by me in Python, hosted on google appengine.
+
+If you don't have tons of requests, you can have a dynamic website based on the  (python standard environment).
 
 Using an SQL database is "cheap" but still costs a few bucks per month. So I decided to use google datastore, which has a free quota of 50'000 queries per month, then it costs still less than a real database.
+
+The only thing that will cost you is the domain name (but you can use a free -and less professional- "appspot" subdomain).
 
 See [nomnoml diagram](http://www.nomnoml.com/#view/%5BWordPress%5D-%5BMySQL%20DB%5D%0A%5BWordPress%5D-%5BWordPress%20Pictures%5D%0A%0A%5BMySQL%20DB%5Dexport-%3E%5BCSV%5D%0A%0A%5BCSV%5D-%3Edb_init%5BSQLite%5D%0A%0A%5BSQLite%5Dmigrate-%3E%5BDatastore%5D%0A%0A%5Bsettings.ini%5Dmigrate-%3E%5BDatastore%5D%0A%0A%5BSQLite%5D-%5BTemp%20Blog%5D%0A%5Bsettings.ini%5D-%5BTemp%20Blog%5D%0A%0A%5BDatastore%7C%0A-%20Posts%0A-%20Configs%5D%0A%0A%5BWordPress%20Pictures%5Dupload-%3E%5BBucket%5D%0A%0A%5BDatastore%5D-%5BPython%20Blog%5D%0A%5BBucket%5D-%5BPython%20Blog%5D)
 
@@ -33,7 +37,7 @@ This is work still in progress. In the meantime, if you know SQLalchemy, you kno
 
 With [Jetbrains DataGrip](https://www.jetbrains.com/datagrip/) import the CSV in the wp_posts table.
 
-This query was useful to me, to see all my blog posts:
+SQL query to see only blog posts:
 ```
 select * from wp_posts
 where post_status = 'publish'
@@ -41,7 +45,7 @@ where post_status = 'publish'
   and post_password = '';
 ```
 
-This query was useful to me, to see all pages and other entities (menu items etc.):
+To see all pages and other entities (menu items etc.) select what is different than `post`,:
 ```
 select * from wp_posts
 where post_status = 'publish'
@@ -49,9 +53,9 @@ where post_status = 'publish'
   and post_password = '';
 ```
 
-## Configure appengine and the local test enviroment
+## Configure appengine and the local test environment
 
-Work in progress.
+These instructions are still *work in progress* and need more details.
 
 - Create service key for your appengine project and save it inside the `keys` folder.
 - In a command line, run: `gcloud beta emulators datastore start`. Note the line that says (e.g. in my case) `export DATASTORE_EMULATOR_HOST=localhost:8081`
@@ -75,7 +79,7 @@ Run the *main - test configuration* created above.
 
 See [Google Login Flask tutorial](https://realpython.com/flask-google-login/).
 
-Create a client for local testing purposes, then create one for your production website. The steps are the same. Just the URLs will differ if you use a different port and in prod, you will use your domain name.
+Create an oauth client for local testing purposes, then create one for your production website. The steps are the same. Just the URLs will differ if you use a different port and in prod, you will use your domain name.
 
 Note, when you deploy your files in "prod", if you did not associate the app to a custom domain, you will have a domain similar to this: https://project-id.oa.r.appspot.com (you can see the URL in the [appengine dashboard](https://console.cloud.google.com/appengine), but only after deploying it for th first time).
 
@@ -92,14 +96,21 @@ In prod you can use this URL and also your custom domain name.
 
 Repeat the same process, later, for your production domain (you can re-use the same consent screen if you want, but it's a good idea to separate the test clint from the prod client).
 
+## Local testing
+
+For local testing, to browse using http (instead of https) and to disable login (by default it's required) for the admin area, edit your `main - test` configuration and set the environment variable `LOCAL_DEVELOPMENT_MODE = True` (or set via command line before running the app).
+
 ## Depploy the app
 
 - [Enable Cloud Build](https://console.developers.google.com/apis/api/cloudbuild.googleapis.com/overview) for your project (this requires you to associate your project to a billing account)
 - Run `gcloud --project=PROJECT-ID datastore indexes create index.yaml` to create the necessary indexes for datastore
 - Copy the `app.yaml` file to `data/app.yaml` (you can have several .yaml files for different environments/projects, so you can name the file accordingly) and set the client id and secret.
-- Run `mv data/pbworks.yaml .; gcloud app deploy --project=pbworks ./pbworks.yaml; mv pbworks.yaml data/`
-  - Note: if you specify the `app.yaml` file in a subfolder, it will deploy the contents of the subfolder where the yaml file is located, so I move the file in the app folder, deploy, then move it back to the data folder.
-  - If it's the first deployment, you will see a screen allowing you the location where to host your app. Choose wisely, e.g. if you live in Europe, but your audience is mostly come from USA, choose a location in the US. check also [Cloud Locations](https://cloud.google.com/about/locations) and see which products are available, e.g. I chose `us-east4`. You can also check the cost. But if you plan to host a small website with not many hits, the const will be free anyway.
+- Run `mv data/myapp.yaml .; gcloud app deploy --project=myapp ./myapp.yaml; mv myapp.yaml data/`
+  - Note: if you specify the `app.yaml` file in a subfolder, it will deploy the contents of the subfolder where the yaml file is located, so I move the file (in my case `myapp.yaml`) in the app folder, deploy, then move it back to the data folder.
+  - If it's the first deployment, you will see a screen allowing you to choose the location where to host your app. Choose wisely, e.g. if you live in Europe, but your audience is reading your content mostly from USA, choose a location in the US. check alse several .yaml files for different environments/projects, so you can name the file accordingly) and set the client id and secret.
+- Run `mv data/myapp.yaml .; gcloud app deploy --project=myapp ./myapp.yaml; mv myapp.yaml data/`
+  - Note: if you specify the `app.yaml` file in a subfolder, it will deploy the contents of the subfolder where the yaml file is located, so I move the file (in my case `myapp.yaml`) in the app folder, deploy, then move it back to the data folder.
+  - If it's the first deployment, you will see a screen allowing you to choose the location where to host your app. Choose wisely, e.g. if you live in Europe, but your audience is reading your content mostly from USA, choose a location in the US. check also [Cloud Locations](https://cloud.google.com/about/locations) and see which products are available, e.g. I chose `us-east4`. You can also check the cost. But if you plan to host a small website with not many hits, the const will be free anyway.
 
 ## Various
 
