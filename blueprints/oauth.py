@@ -48,11 +48,8 @@ def unauthorized():
 def login_welcome():
     if current_user.is_authenticated:
         return (
-            f'<p>Hello, {current_user.name}! You are logged in! Email: {current_user.email}</p>'
-            f'<div>'
-            f'<p>Google Profile Picture:</p><img src="{current_user.profile_pic}" alt="Google profile pic"></img>'
-            f'</div>'
-            f'<br/><a href="/">Home</a> - <a href="/logout">Logout</a>'
+            f'<p>Hello, {current_user.name}! You are logged in as {current_user.email}</p>'
+            f'<p><a href="/">Home</a> - <a href="/admin/">Admin</a> - <a href="/logout">Logout</a></p>'
             )
     else:
         return '<a class="button" href="/login">Google Login</a>'
