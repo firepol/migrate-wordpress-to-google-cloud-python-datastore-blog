@@ -3,10 +3,11 @@ import logging
 from flask import Blueprint, render_template, abort, request, redirect, url_for, current_app, flash
 from flask_login import login_required
 
+from blobs.blob_group import get_dict_blob_group
 from datastore_queries import get_all_posts
 from datastore_queries_admin import *
 from utils_flask import set_global_config
-from utils_google_cloud_bucket import upload_to_bucket
+from utils_google_cloud_bucket import upload_to_bucket, get_all_bucket_blobs
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger()
@@ -101,7 +102,7 @@ def post_delete(post_id):
         abort(500)
 
 
-# UPLOAD
+# BUCKET
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
@@ -112,6 +113,7 @@ def allowed_file(filename):
 
 
 @admin.route('/upload', methods=['POST'])
+@login_required
 def upload_file():
     if 'file' not in request.files:  # check if the post request has the file part
         flash('No file part')
@@ -125,6 +127,14 @@ def upload_file():
         return {
             'location': blob_public_url
         }
+
+
+@admin.route('/uploads/')
+@login_required
+def uploads():
+    bucket_blobs = get_all_bucket_blobs()
+    result = get_dict_blob_group(bucket_blobs)
+    return render_template('uploads.html', grouped_blobs=result)
 
 
 # ADMIN USERS

@@ -124,3 +124,7 @@ aside ul li a {
     color: #9f9f9f;
     text-decoration: none;
 }
+
+.wrapped {
+  word-wrap: break-word;
+}

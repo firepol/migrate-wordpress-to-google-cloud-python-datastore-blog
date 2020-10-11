@@ -29,3 +29,12 @@ def upload_to_bucket(file):
     blob = bucket.blob(blob_name)
     blob.upload_from_file(file)
     return blob.public_url
+
+
+def get_all_bucket_blobs():
+    """Lists all the blobs in the bucket."""
+    settings = get_settings()
+    bucket_name = settings['blog_config']['google_cloud_bucket_name']
+    storage_client = storage.Client()
+    blobs = storage_client.list_blobs(bucket_name)
+    return list(blobs)

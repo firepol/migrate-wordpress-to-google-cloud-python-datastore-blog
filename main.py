@@ -5,6 +5,7 @@ from flask import Flask
 from flask_login import LoginManager
 from jinja2 import evalcontextfilter
 from markupsafe import escape, Markup
+from slugify import slugify
 
 from configuration import LOCAL_DEVELOPMENT_MODE
 from user import User
@@ -40,6 +41,11 @@ app.register_blueprint(admin)
 @app.template_filter()
 def datetimeformat(value, format='%Y-%m-%d'):
     return value.strftime(format)
+
+
+@app.template_filter()
+def get_slug(value):
+    return slugify(value)
 
 
 @app.template_filter()
