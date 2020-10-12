@@ -7,6 +7,9 @@
 # My data
 data/
 
+# Test output data
+tests/output/
+
 # Google Cloud Service key etc.
 keys/
 

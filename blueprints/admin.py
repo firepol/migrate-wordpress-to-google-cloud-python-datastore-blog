@@ -1,4 +1,5 @@
 import logging
+import os
 
 from flask import Blueprint, render_template, abort, request, redirect, url_for, current_app, flash
 from flask_login import login_required
@@ -104,12 +105,7 @@ def post_delete(post_id):
 
 # BUCKET
 
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+ALLOWED_UPLOAD_EXTENSIONS = {'.txt', '.pdf', '.zip', '.png', '.jpg', '.jpeg', '.gif'}
 
 
 @admin.route('/upload', methods=['POST'])
@@ -122,7 +118,9 @@ def upload_file():
     if file.filename == '':  # if user selects no file, browser also submits an empty part without filename
         flash('No selected file')
         return redirect(request.url)
-    if file and allowed_file(file.filename):
+    base_filename, extension = os.path.splitext(file.filename)
+    if file and extension in ALLOWED_UPLOAD_EXTENSIONS:
+        # TODO: upload different sizes and return the most suitable version
         blob_public_url = upload_to_bucket(file)
         return {
             'location': blob_public_url

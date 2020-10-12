@@ -3,8 +3,11 @@ import logging
 from google.cloud import storage
 from werkzeug.utils import secure_filename
 
+from blobs.file_type import FileType
 from tools.local_utils import get_settings
 from datetime import datetime
+
+from utils_image import resize, make_small_square, get_size
 
 log = logging.getLogger()
 
@@ -28,7 +31,25 @@ def upload_to_bucket(file):
     log.info(f'Uploading file {file_name} to bucket')
     blob = bucket.blob(blob_name)
     blob.upload_from_file(file)
+
+    # TODO: do this only for pics
+    results = dict()
+    results[FileType.LittleSquare] = make_small_square(file, file_name, 150)
+    for file_type in FileType:
+        if file_type not in [FileType.Original, FileType.Other, FileType.Small, FileType.LittleSquare]:
+            result = resize_if_bigger(file, file_name, file_type.value[0])
+            if result:
+                results[file_type] = result
+
     return blob.public_url
+
+
+def resize_if_bigger(file, file_name, wished_side):
+    original_width, original_height = get_size(file)
+    # resize original and upload it:
+    if original_width > wished_side or original_height > wished_side:
+        return resize(file, file_name, (wished_side, wished_side))
+    return None
 
 
 def get_all_bucket_blobs():
