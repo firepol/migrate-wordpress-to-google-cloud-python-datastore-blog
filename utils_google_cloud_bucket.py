@@ -4,7 +4,7 @@ from google.cloud import storage
 from werkzeug.utils import secure_filename
 
 from blobs.file_type import FileType
-from tools.local_utils import get_settings
+from datastore_queries import get_config_dictionary
 from datetime import datetime
 
 from utils_image import resize, make_small_square, get_size
@@ -18,9 +18,9 @@ def upload_to_bucket(file):
     :param file: file to upload
     :return: blob public url
     """
-    settings = get_settings()
-    bucket_name = settings['blog_config']['google_cloud_bucket_name']
-    blob_name_prefix = settings['blog_config']['blob_name_prefix']
+    config = get_config_dictionary()
+    bucket_name = config['google_cloud_bucket_name']
+    blob_name_prefix = config['blob_name_prefix']
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
     today = datetime.today()
@@ -54,8 +54,8 @@ def resize_if_bigger(file, file_name, wished_side):
 
 def get_all_bucket_blobs():
     """Lists all the blobs in the bucket."""
-    settings = get_settings()
-    bucket_name = settings['blog_config']['google_cloud_bucket_name']
+    config = get_config_dictionary()
+    bucket_name = config['google_cloud_bucket_name']
     storage_client = storage.Client()
     blobs = storage_client.list_blobs(bucket_name)
     return list(blobs)

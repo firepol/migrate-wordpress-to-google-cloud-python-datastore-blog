@@ -100,14 +100,11 @@ Repeat the same process, later, for your production domain (you can re-use the s
 
 For local testing, to browse using http (instead of https) and to disable login (by default it's required) for the admin area, edit your `main - test` configuration and set the environment variable `LOCAL_DEVELOPMENT_MODE = True` (or set via command line before running the app).
 
-## Depploy the app
+## Deploy the app
 
 - [Enable Cloud Build](https://console.developers.google.com/apis/api/cloudbuild.googleapis.com/overview) for your project (this requires you to associate your project to a billing account)
 - Run `gcloud --project=PROJECT-ID datastore indexes create index.yaml` to create the necessary indexes for datastore
 - Copy the `app.yaml` file to `data/app.yaml` (you can have several .yaml files for different environments/projects, so you can name the file accordingly) and set the client id and secret.
-- Run `mv data/myapp.yaml .; gcloud app deploy --project=myapp ./myapp.yaml; mv myapp.yaml data/`
-  - Note: if you specify the `app.yaml` file in a subfolder, it will deploy the contents of the subfolder where the yaml file is located, so I move the file (in my case `myapp.yaml`) in the app folder, deploy, then move it back to the data folder.
-  - If it's the first deployment, you will see a screen allowing you to choose the location where to host your app. Choose wisely, e.g. if you live in Europe, but your audience is reading your content mostly from USA, choose a location in the US. check alse several .yaml files for different environments/projects, so you can name the file accordingly) and set the client id and secret.
 - Run `mv data/myapp.yaml .; gcloud app deploy --project=myapp ./myapp.yaml; mv myapp.yaml data/`
   - Note: if you specify the `app.yaml` file in a subfolder, it will deploy the contents of the subfolder where the yaml file is located, so I move the file (in my case `myapp.yaml`) in the app folder, deploy, then move it back to the data folder.
   - If it's the first deployment, you will see a screen allowing you to choose the location where to host your app. Choose wisely, e.g. if you live in Europe, but your audience is reading your content mostly from USA, choose a location in the US. check also [Cloud Locations](https://cloud.google.com/about/locations) and see which products are available, e.g. I chose `us-east4`. You can also check the cost. But if you plan to host a small website with not many hits, the const will be free anyway.
