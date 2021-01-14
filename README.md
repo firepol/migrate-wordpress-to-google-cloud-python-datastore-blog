@@ -94,7 +94,7 @@ In prod you can use this URL and also your custom domain name.
   - Note client ID and secret somewhere safe (e.g. in a keepass encrypted file)
   - Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in the Environment variables of your `main - test` configuration
 
-Repeat the same process, later, for your production domain (you can re-use the same consent screen if you want, but it's a good idea to separate the test clint from the prod client).
+Repeat the same process, later, for your production domain (you can re-use the same consent screen if you want, but it's a good idea to separate the test client from the prod client).
 
 ## Local testing
 
