@@ -1,4 +1,4 @@
-runtime: python37
+runtime: python38
 
 env_variables:
   GOOGLE_CLIENT_ID: %GOOGLE_CLIENT_ID%
@@ -14,4 +14,5 @@ handlers:
   # required when static routes are defined, but can be omitted (along with
   # the entire handlers section) when there are no static files defined.
 - url: /.*
+  secure: always
   script: auto
