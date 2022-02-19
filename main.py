@@ -64,6 +64,6 @@ if __name__ == '__main__':
     app.run(
         ssl_context=ssl_context,
         host='localhost',
-        port=8080,
+        port=8082,
         debug=True
     )
